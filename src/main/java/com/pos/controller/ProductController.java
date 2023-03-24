@@ -32,7 +32,7 @@ public class ProductController {
 
     @PostMapping("/product/import")
     public ResponseEntity<String> importData(@RequestParam("file") MultipartFile file) /*throws IOException*/ {
-        try{
+        try {
             List<Product> productList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
@@ -49,86 +49,79 @@ public class ProductController {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(productList);
             return ResponseEntity.ok(json);
-        }
-        catch (IOException ioException){
+        } catch (IOException ioException) {
             System.out.println("IO Exception");
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
     }
+
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts() {
         //return new ResponseEntity<>(playerRepo.findAllNames(), HttpStatus.OK);
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 
-    /* @GetMapping("/player/names")
-    public ResponseEntity<List<String>> getPlayerNames() {
-        return new ResponseEntity<>(productService.findAllPlayerNames(), HttpStatus.OK);
+    @GetMapping("/product/names")
+    public ResponseEntity<List<String>> getProductNames() {
+        return new ResponseEntity<>(productService.findAllProductNames(), HttpStatus.OK);
 
     }
-    @GetMapping("/player/{name}")
-    public ResponseEntity<Product> getPlayerByName(@PathVariable String name) {
-        try{
-            Product Product = productService.findByPlayerName(name);
-            return new ResponseEntity<>(Product,HttpStatus.OK);
-        }
-        catch (RecordNotFoundException recordNotFoundException){
+
+    @GetMapping("/product/{name}")
+    public ResponseEntity<Product> getProductByName(@PathVariable String name) {
+        try {
+            Product Product = productService.findByProductName(name);
+            return new ResponseEntity<>(Product, HttpStatus.OK);
+        } catch (RecordNotFoundException recordNotFoundException) {
             System.out.println(recordNotFoundException.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @GetMapping("/players/team/{teamName}")
-    public ResponseEntity<List<Product>> getPlayerByTeamName(@PathVariable String teamName) {
-        return new ResponseEntity<>(productService.findByTeamName(teamName), HttpStatus.OK);
-    }*/
 
     @PostMapping("/product")
     public ResponseEntity<Product> addProducts(@RequestBody Product product) {
 
-        try{
+        try {
             productService.add(product);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        catch (NameException nameException){
+        } catch (NameException nameException) {
             System.out.println(nameException.getMessage());
-            return new ResponseEntity<>(product,HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(product, HttpStatus.NOT_ACCEPTABLE);
         }
     }
-/*
-    @PutMapping("/player/{id}")
-    public ResponseEntity<Product> updatePlayer(@PathVariable Long id, @RequestBody Product product)
-    {
-        productService.update(id,product);
-        return new ResponseEntity<Product>(HttpStatus.OK);
-    }*/
 
-    /*@PutMapping("/player/details")
-    public ResponseEntity<Product> updatePlayerWithDetails(@RequestBody Product product){
-        Product updateDto = productService.updatePlayerDetails(product);
-        return new ResponseEntity<Product>(updateDto,HttpStatus.OK);
-    }
-
-    @PatchMapping("/player/{id}")
-    public Product patchPlayer(@PathVariable Long id, @RequestBody Product product) {
-        return productService.patch(id,product);
-    }
-
-    @DeleteMapping("/player/id/{id}")
-    public ResponseEntity<Product> deletePlayer(@PathVariable Long id){
-        productService.deleteUsingId(id);
+    @PutMapping("/product/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        productService.update(id, product);
         return new ResponseEntity<Product>(HttpStatus.OK);
     }
+
+    @PatchMapping("/product/{id}")
+    public Product patchProduct(@PathVariable Long id, @RequestBody Product product) {
+        return productService.patch(id, product);
+    }
+
+    @DeleteMapping("/product/id/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long id) {
+        try {
+            productService.deleteUsingId(id);
+            return new ResponseEntity<Product>(HttpStatus.OK);
+        } catch (RecordNotFoundException recordNotFoundException) {
+            System.out.println(recordNotFoundException.getMessage());
+            return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/player/name/{name}")
-    public ResponseEntity<Product> deletePlayerUsingName(@PathVariable String name){
-        try{
+    public ResponseEntity<Product> deletePlayerUsingName(@PathVariable String name) {
+        try {
             productService.deleteUsingName(name);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        catch (RecordNotFoundException recordNotFoundException){
+        } catch (RecordNotFoundException recordNotFoundException) {
             System.out.println(recordNotFoundException.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }*/
+        }
     }
+}
 

@@ -2,11 +2,14 @@ package com.pos.services;
 
 import com.pos.entity.Product;
 import com.pos.exception.NameException;
+import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements com.pos.services.Service<Product> {
@@ -19,6 +22,24 @@ public class ProductServiceImpl implements com.pos.services.Service<Product> {
         List<Product> productList = productRepository.findAll();
         return productList;
     }
+    public List<String> findAllProductNames(){
+        List<String> productNames= productRepository.findAllNames();
+        return productNames;
+    }
+
+    public Product findByProductName(String name) throws RecordNotFoundException {
+
+        Optional<Product> productOptional = productRepository.findByName(name);
+        Product product = null;
+        if(productOptional.isPresent()){
+            product = productOptional.get();
+        }
+        else {
+            throw new RecordNotFoundException("Product not found. Try with space between name");
+        }
+        return product;
+    }
+
 
     @Override
     public Product add(Product product) {
@@ -33,7 +54,13 @@ public class ProductServiceImpl implements com.pos.services.Service<Product> {
 
     @Override
     public void deleteUsingId(Long id) {
-
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            productRepository.delete(productOptional.get());
+        }
+        else {
+            throw new RecordNotFoundException("Product not found");
+        }
     }
 
     @Override
@@ -42,12 +69,44 @@ public class ProductServiceImpl implements com.pos.services.Service<Product> {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Product update(Long id, Product product) {
-        return null;
+        Product updateProduct = null;
+        Optional<Product> productOptional = productRepository.findById(product.getId());
+        if(productOptional.isPresent()){
+           updateProduct = productOptional.get();
+            updateProduct.setName(product.getName());
+            updateProduct.setBatchNum(product.getBatchNum());
+            updateProduct.setMfgDate(product.getMfgDate());
+            updateProduct.setExpiryDate(product.getExpiryDate());
+        }
+        return updateProduct;
     }
 
     @Override
-    public Product patch(Long id, Product dto) {
-        return null;
+    @Transactional(rollbackFor = Exception.class)
+    public Product patch(Long id, Product product) {
+        Product patchProduct = null;
+        Optional<Product> productOptional  = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            patchProduct = productOptional.get();
+            if (product.getName() != null) {
+                patchProduct.setName(product.getName());
+            }
+            else if (product.getBatchNum()!= null) {
+                patchProduct.setBatchNum(product.getBatchNum());
+            }
+            else if (product.getMfgDate()!= null) {
+                patchProduct.setMfgDate(product.getMfgDate());
+            }
+            else if (product.getExpiryDate()!= null) {
+                patchProduct.setExpiryDate(product.getExpiryDate());
+            }
+        }
+        return patchProduct;
     }
+
+
+
+
 }
