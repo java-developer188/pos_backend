@@ -21,6 +21,19 @@ public class Order {
     @OneToMany(mappedBy = "order")
     Set<ProductOrder> productOrders;
 
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="customer_id")
+    private CustomerEntity customerEntity;
+
+
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
+    }
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
+    }
+
     public Long getId() {
         return id;
     }

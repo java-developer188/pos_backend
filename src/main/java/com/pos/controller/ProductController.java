@@ -113,8 +113,8 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/player/name/{name}")
-    public ResponseEntity<Product> deletePlayerUsingName(@PathVariable String name) {
+    @DeleteMapping("/product/name/{name}")
+    public ResponseEntity<Product> deleteProductUsingName(@PathVariable String name) {
         try {
             productService.deleteUsingName(name);
             return new ResponseEntity<>(HttpStatus.OK);
