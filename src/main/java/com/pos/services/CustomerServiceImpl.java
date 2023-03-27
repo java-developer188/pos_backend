@@ -1,13 +1,16 @@
 package com.pos.services;
 
 import com.pos.entity.CustomerEntity;
-import com.pos.entity.Product;
+import com.pos.entity.Order;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.CustomerRepository;
+import com.pos.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +19,8 @@ public class CustomerServiceImpl implements com.pos.services.Service<CustomerEnt
 
     @Autowired
     CustomerRepository customerRepo;
+    @Autowired
+    OrderRepository orderRepo;
 
     @Override
     public List<CustomerEntity> findAll() {
@@ -91,6 +96,7 @@ public class CustomerServiceImpl implements com.pos.services.Service<CustomerEnt
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CustomerEntity patch(Long id, CustomerEntity customerEntity) {
+
         CustomerEntity patchCustomer = null;
         Optional<CustomerEntity> customerEntity1  = customerRepo.findById(id);
         if(customerEntity1.isPresent()){
@@ -110,4 +116,33 @@ public class CustomerServiceImpl implements com.pos.services.Service<CustomerEnt
         }
         return patchCustomer;
     }
+
+//
+//    public CustomerEntity updateCustomerWithOrder(CustomerEntity customerEntity){
+//
+//    List<CustomerEntity> customerEntityList=customerRepo.findAll();
+//    List<CustomerEntity> customerEntityList1=new ArrayList<>();
+//    customerEntityList.forEach(customerEntity1 -> {
+//        CustomerEntity customerEntity2=new CustomerEntity();
+//        customerEntity2.setName(customerEntity1.getName());
+//        customerEntity2.setContactInfo(customerEntity1.getContactInfo());
+//        customerEntity2.setAddress(customerEntity1.getAddress());
+//        customerEntity2.setNtn(customerEntity1.getNtn());
+//        List<String> orderList=new ArrayList<>();
+//        for (Order order:customerEntity1.getOrderList()){
+//
+//            orderList.add(String.valueOf(order.getStatus()));
+//            orderList.add(String.valueOf(order.getOrderDate()));
+//            orderList.add(String.valueOf(order.getTotalAmount()));
+//            orderList.add(String.valueOf(order.getQuantity()));
+//            orderList.add(String.valueOf(order.getProductOrders()));
+//        }
+//        customerEntity2.setOrderList(orderList);
+//    });
+//
+//
+//    }
+
+
+
 }

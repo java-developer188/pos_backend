@@ -4,6 +4,7 @@ import com.pos.enums.OrderStatus;
 
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -15,6 +16,14 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
+    @Column
+    private  Long quantity;
+
+    @Column
+    private Long totalAmount;
+
+    @Column(name=" order_date")
+    private Date orderDate;
     @Column(name = "order_status")
     private OrderStatus status;
 
@@ -56,5 +65,29 @@ public class Order {
 
     public void setProductOrders(Set<ProductOrder> productOrders) {
         this.productOrders = productOrders;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+    public Long getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 }
