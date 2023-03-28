@@ -64,8 +64,14 @@ public class ProductServiceImpl implements com.pos.services.Service<Product> {
     }
 
     @Override
-    public void deleteUsingName(String name) {
-
+    public void deleteUsingName(String name) throws RecordNotFoundException {
+        Optional<Product> productOptional = productRepository.findByName(name);
+        if(productOptional.isPresent()){
+            productRepository.delete(productOptional.get());
+        }
+        else {
+            throw new RecordNotFoundException("Product not found");
+        }
     }
 
     @Override

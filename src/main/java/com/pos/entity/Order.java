@@ -21,6 +21,13 @@ public class Order {
     @OneToMany(mappedBy = "order")
     Set<ProductOrder> productOrders;
 
+    public Set<ProductOrder> getProductOrders() {
+        return productOrders;
+    }
+
+    public void setProductOrders(Set<ProductOrder> productOrders) {
+        this.productOrders = productOrders;
+    }
     public Long getId() {
         return id;
     }
@@ -37,11 +44,5 @@ public class Order {
         this.status = status;
     }
 
-    public Set<ProductOrder> getProductOrders() {
-        return productOrders;
-    }
 
-    public void setProductOrders(Set<ProductOrder> productOrders) {
-        this.productOrders = productOrders;
-    }
 }
