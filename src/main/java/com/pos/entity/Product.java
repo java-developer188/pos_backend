@@ -1,6 +1,7 @@
 package com.pos.entity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,19 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     Set<ProductOrder> productOrders;
+
+
+
+    @OneToMany(mappedBy = "productList")
+    private List<InventoryEntity> inventoryEntity;
+
+    public List<InventoryEntity> getInventoryEntity() {
+        return inventoryEntity;
+    }
+
+    public void setInventoryEntity(List<InventoryEntity> inventoryEntity) {
+        this.inventoryEntity = inventoryEntity;
+    }
 
     public Set<ProductOrder> getProductOrders() {
         return productOrders;
@@ -70,6 +84,8 @@ public class Product {
     public String getMfgDate() {
         return mfgDate;
     }
+
+
 
     public void setMfgDate(String mfgDate) {
         this.mfgDate = mfgDate;

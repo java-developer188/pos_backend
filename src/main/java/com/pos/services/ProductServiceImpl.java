@@ -45,7 +45,7 @@ public class ProductServiceImpl implements com.pos.services.Service<Product> {
     public Product add(Product product) {
         if ( null != product.getName() ) {
             if (!product.getName().matches("^[a-zA-Z\\s]+")) {
-                throw new NameException("Only alphabets and spaces are allowed for student's name.");
+                throw new NameException("Only alphabets and spaces are allowed for product's name.");
             }
         }
         Product product1 = productRepository.save(product);

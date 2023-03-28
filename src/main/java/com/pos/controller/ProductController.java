@@ -31,7 +31,7 @@ public class ProductController {
     ProductRepository productRepo;
 
     @PostMapping("/product/import")
-    public ResponseEntity<String> importData(@RequestParam("file") MultipartFile file)  {
+    public ResponseEntity<String> importData(@RequestParam("file") MultipartFile file) /*throws IOException*/ {
         try {
             List<Product> productList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -114,7 +114,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/name/{name}")
-    public ResponseEntity<Product> deleteOrderUsingName(@PathVariable String name) {
+    public ResponseEntity<Product> deleteProductUsingName(@PathVariable String name) {
         try {
             productService.deleteUsingName(name);
             return new ResponseEntity<>(HttpStatus.OK);
