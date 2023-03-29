@@ -5,7 +5,7 @@ import com.pos.entity.Product;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.ProductRepository;
-import com.pos.services.ProductServiceImpl;
+import com.pos.services.ProductPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,7 +25,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    ProductServiceImpl productService;
+    ProductPOSServiceImpl productService;
 
     @Autowired
     ProductRepository productRepo;

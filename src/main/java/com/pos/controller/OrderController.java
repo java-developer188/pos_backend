@@ -3,7 +3,7 @@ package com.pos.controller;
 import com.pos.entity.Order;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
-import com.pos.services.OrderServiceImpl;
+import com.pos.services.OrderPOSServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class OrderController {
     
     @Autowired
-    OrderServiceImpl orderServiceImpl;
+    OrderPOSServiceImpl orderServiceImpl;
     
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getOrders() {
@@ -63,7 +64,7 @@ public class OrderController {
         Order patchOrder = orderServiceImpl.patch(id, order);
         return new ResponseEntity<Order>(patchOrder,HttpStatus.OK);
     }
-
+    
     @DeleteMapping("/order/id/{id}")
     public ResponseEntity<Order> deleteOrder(@PathVariable Long id) {
         try {

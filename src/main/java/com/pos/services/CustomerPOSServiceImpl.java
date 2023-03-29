@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomerServiceImpl implements com.pos.services.Service<CustomerEntity> {
+public class CustomerPOSServiceImpl implements POSService<CustomerEntity> {
 
     @Autowired
     CustomerRepository customerRepo;
@@ -54,8 +54,15 @@ public class CustomerServiceImpl implements com.pos.services.Service<CustomerEnt
                 throw new NameException("Only alphabets and spaces are allowed for customer's name.");
             }
         }
-        CustomerEntity customerEntity1 = customerRepo.save(customerEntity);
-        return customerEntity1;
+        List<Order> orderList = new ArrayList<>();
+        customerEntity.getOrderList().forEach(order1 ->{
+            orderList.add(order1);
+        });
+        orderList.forEach(order -> {
+            order.setCustomerEntity(customerEntity);
+            customerEntity.addOrder(order);
+        });
+        return customerRepo.save(customerEntity);
     }
 
 
@@ -117,7 +124,7 @@ public class CustomerServiceImpl implements com.pos.services.Service<CustomerEnt
         return patchCustomer;
     }
 
-//
+
 //    public CustomerEntity updateCustomerWithOrder(CustomerEntity customerEntity){
 //
 //    List<CustomerEntity> customerEntityList=customerRepo.findAll();
@@ -142,7 +149,5 @@ public class CustomerServiceImpl implements com.pos.services.Service<CustomerEnt
 //
 //
 //    }
-
-
 
 }

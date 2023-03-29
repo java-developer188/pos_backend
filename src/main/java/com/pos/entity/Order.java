@@ -1,5 +1,6 @@
 package com.pos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pos.enums.OrderStatus;
 
 
@@ -17,19 +18,20 @@ public class Order {
     private Long id;
 
     @Column
-    private  Long quantity;
+    private Long quantity;
 
     @Column
     private Long totalAmount;
 
     @Column(name=" order_date")
     private Date orderDate;
+
     @Column(name = "order_status")
+    //@Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order")
     Set<ProductOrder> productOrders;
-
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="customer_id")

@@ -1,6 +1,9 @@
 package com.pos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,9 +27,8 @@ public class CustomerEntity {
     @Column(name = "customer_NTN")
     private Long ntn;
 
-    @OneToMany(mappedBy = "customerEntity")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customerEntity")
     private List<Order> orderList;
-
 
     public List<Order> getOrderList() {
         return orderList;
@@ -34,6 +36,14 @@ public class CustomerEntity {
 
     public void setOrderList(List<Order> orderList) {
         this.orderList = orderList;
+    }
+
+    public void addOrder(Order order){
+        if(orderList==null){
+            orderList = new ArrayList<>();
+        }
+        orderList.add(order);
+
     }
 
     public Long getId() {

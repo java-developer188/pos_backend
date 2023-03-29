@@ -2,11 +2,10 @@ package com.pos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pos.entity.CustomerEntity;
-import com.pos.entity.Product;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.CustomerRepository;
-import com.pos.services.CustomerServiceImpl;
+import com.pos.services.CustomerPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,12 +24,10 @@ import java.util.List;
 @RequestMapping("/api")
 public class CustomerController {
     @Autowired
-    CustomerServiceImpl customerService;
+    CustomerPOSServiceImpl customerService;
 
     @Autowired
     CustomerRepository customerRepository;
-
-
 
     @PostMapping("/customer/import")
     public ResponseEntity<String> importData(@RequestParam("file") MultipartFile file) /*throws IOException*/ {
@@ -42,8 +39,8 @@ public class CustomerController {
                 CustomerEntity customerEntity = new CustomerEntity();
                 customerEntity.setName(row.getCell(0).getStringCellValue());
                 customerEntity.setAddress(row.getCell(1).getStringCellValue());
-                customerEntity.setContactInfo(Long.valueOf(row.getCell(2).getStringCellValue()));
-                customerEntity.setNtn(Long.valueOf(row.getCell(3).getStringCellValue()));
+//                customerEntity.setContactInfo(Long.valueOf(row.getCell(2).getStringCellValue()));
+//                customerEntity.setNtn(Long.valueOf(row.getCell(3).getStringCellValue()));
                 customerEntityList.add(customerEntity);
             }
             workbook.close();
@@ -57,8 +54,6 @@ public class CustomerController {
         }
 
     }
-
-
 
     @GetMapping("/customer")
     public ResponseEntity<List<CustomerEntity>> getCustomers() {
@@ -95,7 +90,6 @@ public class CustomerController {
             return new ResponseEntity<>(customerEntity, HttpStatus.NOT_ACCEPTABLE);
         }
     }
-
 
     @PutMapping("/customer/{id}")
     public ResponseEntity<CustomerEntity> updateCustomer(@PathVariable Long id, @RequestBody CustomerEntity customerEntity) {

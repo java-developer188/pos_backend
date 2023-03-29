@@ -1,12 +1,11 @@
 package com.pos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pos.entity.CustomerEntity;
 import com.pos.entity.InventoryEntity;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.InventoryRepository;
-import com.pos.services.InventoryServiceImpl;
+import com.pos.services.InventoryPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -27,7 +26,7 @@ public class InventoryController {
     @Autowired
     InventoryRepository inventoryRepo;
     @Autowired
-    InventoryServiceImpl inventoryService;
+    InventoryPOSServiceImpl inventoryService;
 
 
     @PostMapping("/inventory/import")

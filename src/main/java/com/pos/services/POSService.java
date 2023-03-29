@@ -2,7 +2,7 @@ package com.pos.services;
 
 import java.util.List;
 
-public interface Service<T>{
+public interface POSService<T>{
 
     public List<T> findAll();
 

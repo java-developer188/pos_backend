@@ -14,11 +14,11 @@ public class ProductOrder {
     @Column(name = "product_quantity")
     private Integer quantity;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     Product product;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     Order order;
 

@@ -1,8 +1,6 @@
 package com.pos.services;
 
-import com.pos.entity.CustomerEntity;
 import com.pos.entity.InventoryEntity;
-import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class InventoryServiceImpl implements com.pos.services.Service<InventoryEntity>{
+public class InventoryPOSServiceImpl implements POSService<InventoryEntity> {
     @Autowired
     InventoryRepository inventoryRepo;
 
