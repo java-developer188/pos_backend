@@ -125,29 +125,4 @@ public class CustomerPOSServiceImpl implements POSService<CustomerEntity> {
     }
 
 
-//    public CustomerEntity updateCustomerWithOrder(CustomerEntity customerEntity){
-//
-//    List<CustomerEntity> customerEntityList=customerRepo.findAll();
-//    List<CustomerEntity> customerEntityList1=new ArrayList<>();
-//    customerEntityList.forEach(customerEntity1 -> {
-//        CustomerEntity customerEntity2=new CustomerEntity();
-//        customerEntity2.setName(customerEntity1.getName());
-//        customerEntity2.setContactInfo(customerEntity1.getContactInfo());
-//        customerEntity2.setAddress(customerEntity1.getAddress());
-//        customerEntity2.setNtn(customerEntity1.getNtn());
-//        List<String> orderList=new ArrayList<>();
-//        for (Order order:customerEntity1.getOrderList()){
-//
-//            orderList.add(String.valueOf(order.getStatus()));
-//            orderList.add(String.valueOf(order.getOrderDate()));
-//            orderList.add(String.valueOf(order.getTotalAmount()));
-//            orderList.add(String.valueOf(order.getQuantity()));
-//            orderList.add(String.valueOf(order.getProductOrders()));
-//        }
-//        customerEntity2.setOrderList(orderList);
-//    });
-//
-//
-//    }
-
 }

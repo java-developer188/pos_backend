@@ -39,8 +39,8 @@ public class CustomerController {
                 CustomerEntity customerEntity = new CustomerEntity();
                 customerEntity.setName(row.getCell(0).getStringCellValue());
                 customerEntity.setAddress(row.getCell(1).getStringCellValue());
-//                customerEntity.setContactInfo(Long.valueOf(row.getCell(2).getStringCellValue()));
-//                customerEntity.setNtn(Long.valueOf(row.getCell(3).getStringCellValue()));
+                customerEntity.setContactInfo(Long.valueOf(row.getCell(2).getStringCellValue()));
+                customerEntity.setNtn(Long.valueOf(row.getCell(3).getStringCellValue()));
                 customerEntityList.add(customerEntity);
             }
             workbook.close();

@@ -1,12 +1,14 @@
 package com.pos.services;
 
 import com.pos.entity.InventoryEntity;
+import com.pos.entity.Product;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +25,15 @@ public class InventoryPOSServiceImpl implements POSService<InventoryEntity> {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public InventoryEntity add(InventoryEntity inventoryEntity) {
-       //InventoryEntity inventoryEntity1=inventoryRepo.save(inventoryEntity);
+        List<Product> productList=new ArrayList<>();
+        inventoryEntity.getProductList().forEach(product -> {
+            productList.add(product);
+        });
+        productList.forEach(product1 ->{
+            product1.setInventoryEntity(inventoryEntity);
+            inventoryEntity.addProduct(product1);
+        });
         return inventoryRepo.save(inventoryEntity);
     }
 

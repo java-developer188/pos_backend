@@ -39,7 +39,7 @@ public class InventoryController {
                 InventoryEntity inventoryEntity = new InventoryEntity();
                 inventoryEntity.setAvailableStock(Long.valueOf(row.getCell(0).getStringCellValue()));
                 inventoryEntity.setSoldStock(Long.valueOf(row.getCell(1).getStringCellValue()));
-                //customerEntity.setContactInfo(Long.valueOf(row.getCell(2).getStringCellValue()));
+
 
                 inventoryEntityList.add(inventoryEntity);
             }
@@ -66,15 +66,11 @@ public class InventoryController {
 
     @PostMapping("/inventory")
     public ResponseEntity<InventoryEntity> addInventory(@RequestBody InventoryEntity inventoryEntity) {
-
-        try {
             inventoryService.add(inventoryEntity);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NameException nameException) {
-            System.out.println(nameException.getMessage());
-            return new ResponseEntity<>(inventoryEntity, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<InventoryEntity>(HttpStatus.OK);
+
         }
-    }
+
 
     @PutMapping("/inventory/{id}")
     public ResponseEntity<InventoryEntity> updateCustomer(@PathVariable Long id, @RequestBody InventoryEntity inventoryEntity) {

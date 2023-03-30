@@ -30,14 +30,15 @@ public class Product {
 
 
 
-    @OneToMany(mappedBy = "productList")
-    private List<InventoryEntity> inventoryEntity;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="inventory_id")
+    private InventoryEntity inventoryEntity;
 
-    public List<InventoryEntity> getInventoryEntity() {
+    public InventoryEntity getInventoryEntity() {
         return inventoryEntity;
     }
 
-    public void setInventoryEntity(List<InventoryEntity> inventoryEntity) {
+    public void setInventoryEntity(InventoryEntity inventoryEntity) {
         this.inventoryEntity = inventoryEntity;
     }
 

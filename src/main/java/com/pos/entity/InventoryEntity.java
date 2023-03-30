@@ -1,6 +1,7 @@
 package com.pos.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,16 +19,23 @@ public class InventoryEntity {
     @Column(name = "sold_stock")
     private Long soldStock;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="product_id")
-    private Product productList;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "inventoryEntity")
+    private List<Product> productList;
 
-    public Product getProductList() {
+    public List<Product> getProductList() {
         return productList;
     }
 
-    public void setProductList(Product productList) {
+    public void setProductList(List<Product> productList) {
         this.productList = productList;
+    }
+
+    public void addProduct(Product product){
+        if(productList==null){
+            productList = new ArrayList<>();
+        }
+        productList.add(product);
+
     }
 
     public Long getId() {
