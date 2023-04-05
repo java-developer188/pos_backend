@@ -1,8 +1,6 @@
 package com.pos.services;
 
-import com.pos.entity.CustomerEntity;
 import com.pos.entity.Order;
-import com.pos.entity.ProductOrder;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,7 @@ public class OrderPOSServiceImpl implements POSService<Order> {
     @Override
     public Order add(Order order) {
 //        Order order1 = null;
-//        CustomerEntity customer = order.getCustomerEntity();
+//        Customer customer = order.getCustomerEntity();
 //        order1.setCustomerEntity(customer);
         return orderRepository.save(order);
     }
@@ -57,7 +55,7 @@ public class OrderPOSServiceImpl implements POSService<Order> {
 //        ProductOrder productOrder1 = null;
 //        Order order =null;
 //        productOrder1.setOrder(productOrder.getOrder());
-//        CustomerEntity customer = order.getCustomerEntity();
+//        Customer customer = order.getCustomerEntity();
 //        order1.setCustomerEntity(customer);
 //        order1.setProductOrders(order.);
 //        return null;

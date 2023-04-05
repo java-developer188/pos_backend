@@ -1,12 +1,14 @@
 package com.pos.entity;
 
+import com.pos.dto.OrderDto;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "customer")
-public class CustomerEntity {
+@Table(name = "customers")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +27,7 @@ public class CustomerEntity {
     @Column(name = "customer_NTN")
     private Long ntn;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customerEntity")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
     private List<Order> orderList;
 
     public List<Order> getOrderList() {
@@ -41,7 +43,6 @@ public class CustomerEntity {
             orderList = new ArrayList<>();
         }
         orderList.add(order);
-
     }
 
     public Long getId() {

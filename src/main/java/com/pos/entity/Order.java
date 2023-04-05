@@ -1,11 +1,11 @@
 package com.pos.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pos.enums.OrderStatus;
 
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,18 +31,19 @@ public class Order {
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order")
-    Set<ProductOrder> productOrders;
+    List<ProductOrder> productOrders;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="customer_id")
-    private CustomerEntity customerEntity;
+    private Customer customer;
 
 
-    public CustomerEntity getCustomerEntity() {
-        return customerEntity;
+    public Customer getCustomer() {
+        return customer;
     }
-    public void setCustomerEntity(CustomerEntity customerEntity) {
-        this.customerEntity = customerEntity;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Long getId() {
@@ -61,11 +62,11 @@ public class Order {
         this.status = status;
     }
 
-    public Set<ProductOrder> getProductOrders() {
+    public List<ProductOrder> getProductOrders() {
         return productOrders;
     }
 
-    public void setProductOrders(Set<ProductOrder> productOrders) {
+    public void setProductOrders(List<ProductOrder> productOrders) {
         this.productOrders = productOrders;
     }
 

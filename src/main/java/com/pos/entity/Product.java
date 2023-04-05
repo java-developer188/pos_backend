@@ -1,7 +1,6 @@
 package com.pos.entity;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,10 +24,11 @@ public class Product {
     @Column
     private String mfgDate;
 
+    @Column(name = "product_price")
+    private Integer price;
+
     @OneToMany(mappedBy = "product")
     Set<ProductOrder> productOrders;
-
-
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="inventory_id")
@@ -40,6 +40,14 @@ public class Product {
 
     public void setInventoryEntity(InventoryEntity inventoryEntity) {
         this.inventoryEntity = inventoryEntity;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
     public Set<ProductOrder> getProductOrders() {

@@ -1,11 +1,18 @@
 package com.pos.services;
 
-import com.pos.entity.CustomerEntity;
+import com.pos.adapter.CustomerAdapterImpl;
+import com.pos.adapter.OrderAdapterImpl;
+import com.pos.dto.CustomerDto;
+import com.pos.entity.Customer;
 import com.pos.entity.Order;
+import com.pos.entity.Product;
+import com.pos.entity.ProductOrder;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.CustomerRepository;
 import com.pos.repository.OrderRepository;
+import com.pos.repository.ProductOrderRepository;
+import com.pos.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,17 +22,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomerPOSServiceImpl implements POSService<CustomerEntity> {
+public class CustomerPOSServiceImpl implements POSService<Customer> {
 
     @Autowired
     CustomerRepository customerRepo;
     @Autowired
     OrderRepository orderRepo;
+    @Autowired
+    ProductRepository productRepo;
+
+    @Autowired
+    ProductOrderRepository productOrderRepo;
 
     @Override
-    public List<CustomerEntity> findAll() {
-        List<CustomerEntity> customerEntityList= customerRepo.findAll();
-        return customerEntityList;
+    public List<Customer> findAll() {
+        List<Customer> customerList = customerRepo.findAll();
+        return customerList;
     }
 
     public List<String> findAllCustomerNames(){
@@ -33,96 +45,122 @@ public class CustomerPOSServiceImpl implements POSService<CustomerEntity> {
         return customerNames;
     }
 
-    public CustomerEntity findByCustomerName(String name) throws RecordNotFoundException {
+    public Customer findByCustomerName(String name) throws RecordNotFoundException {
 
-        Optional<CustomerEntity> customerEntity = customerRepo.findByName(name);
-        CustomerEntity customerEntity1 = null;
+        Optional<Customer> customerEntity = customerRepo.findByName(name);
+        Customer customer1 = null;
         if(customerEntity.isPresent()){
-            customerEntity1 = customerEntity.get();
+            customer1 = customerEntity.get();
         }
         else {
             throw new RecordNotFoundException("Customer not found. Try with space between name");
         }
-        return customerEntity1;
+        return customer1;
     }
-
-
     @Override
-    public CustomerEntity add(CustomerEntity customerEntity) {
-        if ( null != customerEntity.getName() ) {
-            if (!customerEntity.getName().matches("^[a-zA-Z\\s]+")) {
+    public Customer add(Customer customer) {
+        if ( null != customer.getName() ) {
+            if (!customer.getName().matches("^[a-zA-Z\\s]+")) {
                 throw new NameException("Only alphabets and spaces are allowed for customer's name.");
             }
         }
         List<Order> orderList = new ArrayList<>();
-        customerEntity.getOrderList().forEach(order1 ->{
+        customer.getOrderList().forEach(order1 ->{
             orderList.add(order1);
         });
-        orderList.forEach(order -> {
-            order.setCustomerEntity(customerEntity);
-            customerEntity.addOrder(order);
+        customer.getOrderList().forEach(order -> {
+            order.setCustomer(customer);
+            customer.addOrder(order);
         });
-        return customerRepo.save(customerEntity);
+        return customerRepo.save(customer);
     }
+    public void addCustomerWithOrder(CustomerDto customerDto) {
+
+        Optional<Customer> customerOptional = customerRepo.findByContactInfo(customerDto.getContactInfo());
+        Customer customer1 = null;
+        CustomerAdapterImpl customerAdapter = new CustomerAdapterImpl();
+        if(customerOptional.isPresent()){
+            customer1 = customerOptional.get();
+        }
+        else{
+            customer1 = customerRepo.save(customerAdapter.convertDtoToDao(customerDto));
+        }
+
+        List<Product> productList = new ArrayList<>();
+        List<Order> orderList = new ArrayList<>();
+
+        OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
 
 
+        customerDto.getOrderDtoList().forEach(orderDto -> {
+           Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
+            orderList.add(order);
+            orderDto.getProductList().forEach(product -> {
+                Optional<Product> productOptional = productRepo.findById(product.getId());
+                if(productOptional.isPresent()){
+                    Product product1 = productOptional.get();
+                    productList.add(product1);
+                    ProductOrder productOrder = new ProductOrder();
+                    productOrder.setProduct(product1);
+                    productOrder.setOrder(order);
+                    productOrderRepo.save(productOrder);
+                }
+            });
+        });
+//        customer1.setOrderList(orderList);
+        customerRepo.save(customer1);
+    }
     @Override
     public void deleteUsingId(Long id) {
-        Optional<CustomerEntity> customerEntity = customerRepo.findById(id);
+        Optional<Customer> customerEntity = customerRepo.findById(id);
         if(customerEntity.isPresent()){
             customerRepo.delete(customerEntity.get());
         }
         else {
             throw new RecordNotFoundException("Customer not found");
         }
-
     }
 
     @Override
     public void deleteUsingName(String name) {
 
     }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public CustomerEntity update(Long id, CustomerEntity customerEntity) {
+    public Customer update(Long id, Customer customer) {
 
-        CustomerEntity updateCustomer = null;
-        Optional<CustomerEntity> customerEntity1 = customerRepo.findById(customerEntity.getId());
+        Customer updateCustomer = null;
+        Optional<Customer> customerEntity1 = customerRepo.findById(customer.getId());
         if(customerEntity1.isPresent()){
             updateCustomer = customerEntity1.get();
-            updateCustomer.setName(customerEntity.getName());
-            updateCustomer.setAddress(customerEntity.getAddress());
-            updateCustomer.setContactInfo(customerEntity.getContactInfo());
-            updateCustomer.setNtn(customerEntity.getNtn());
+            updateCustomer.setName(customer.getName());
+            updateCustomer.setAddress(customer.getAddress());
+            updateCustomer.setContactInfo(customer.getContactInfo());
+            updateCustomer.setNtn(customer.getNtn());
         }
         return updateCustomer;
     }
-
-
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public CustomerEntity patch(Long id, CustomerEntity customerEntity) {
+    public Customer patch(Long id, Customer customer) {
 
-        CustomerEntity patchCustomer = null;
-        Optional<CustomerEntity> customerEntity1  = customerRepo.findById(id);
+        Customer patchCustomer = null;
+        Optional<Customer> customerEntity1  = customerRepo.findById(id);
         if(customerEntity1.isPresent()){
             patchCustomer = customerEntity1.get();
-            if (customerEntity.getName() != null) {
-                patchCustomer.setName(customerEntity.getName());
+            if (customer.getName() != null) {
+                patchCustomer.setName(customer.getName());
             }
-            else if (customerEntity.getAddress()!= null) {
-                patchCustomer.setAddress(customerEntity.getAddress());
+            else if (customer.getAddress()!= null) {
+                patchCustomer.setAddress(customer.getAddress());
             }
-            else if (customerEntity.getContactInfo()!= null) {
-                patchCustomer.setContactInfo(customerEntity.getContactInfo());
+            else if (customer.getContactInfo()!= null) {
+                patchCustomer.setContactInfo(customer.getContactInfo());
             }
-            else if (customerEntity.getNtn()!= null) {
-                patchCustomer.setNtn(customerEntity.getNtn());
+            else if (customer.getNtn()!= null) {
+                patchCustomer.setNtn(customer.getNtn());
             }
         }
         return patchCustomer;
     }
-
-
 }
