@@ -40,6 +40,7 @@ public class ProductController {
                 Product product = new Product();
                 product.setName(row.getCell(0).getStringCellValue());
                 product.setBatchNum(row.getCell(1).getStringCellValue());
+                product.setPrice(Integer.valueOf(row.getCell(2).getStringCellValue()));
 //                product.setMfgDate(row.getCell(2).getStringCellValue());
 //                product.setExpiryDate(row.getCell(3).getStringCellValue());
                 productList.add(product);

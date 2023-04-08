@@ -91,7 +91,6 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
 
         OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
 
-
         customerDto.getOrderDtoList().forEach(orderDto -> {
            Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
             orderList.add(order);
@@ -107,7 +106,10 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                 }
             });
         });
-//        customer1.setOrderList(orderList);
+        Customer customer = customer1;
+        orderList.forEach(order -> {
+            order.setCustomer(customer);
+        });
         customerRepo.save(customer1);
     }
     @Override
