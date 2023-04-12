@@ -14,6 +14,9 @@ public class ProductOrder {
     @Column(name = "product_quantity")
     private Integer quantity;
 
+    @Column(name = "total_price")
+    private Integer price;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     Product product;
@@ -21,6 +24,14 @@ public class ProductOrder {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     Order order;
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
 
     public Long getId() {
         return id;

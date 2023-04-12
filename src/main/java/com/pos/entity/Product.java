@@ -27,6 +27,9 @@ public class Product {
     @Column(name = "product_price")
     private Integer price;
 
+    @Transient
+    private Integer quantity;
+
     @OneToMany(mappedBy = "product")
     Set<ProductOrder> productOrders;
 
@@ -40,6 +43,14 @@ public class Product {
 
     public void setInventoryEntity(InventoryEntity inventoryEntity) {
         this.inventoryEntity = inventoryEntity;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Integer getPrice() {

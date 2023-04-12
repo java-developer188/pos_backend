@@ -1,5 +1,6 @@
 package com.pos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pos.enums.OrderStatus;
 
 
@@ -12,13 +13,12 @@ import java.util.Set;
 @Table(name = "orders")
 public class Order {
 
+    //3 capsule 1 mnzinc 1 cef100
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_id")
     private Long id;
-
-    @Column
-    private Long quantity;
 
     @Column
     private Long totalAmount;
@@ -35,6 +35,7 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="customer_id")
+    @JsonIgnore
     private Customer customer;
 
 
@@ -68,14 +69,6 @@ public class Order {
 
     public void setProductOrders(List<ProductOrder> productOrders) {
         this.productOrders = productOrders;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
     }
 
     public Long getTotalAmount() {

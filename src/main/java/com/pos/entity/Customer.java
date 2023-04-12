@@ -1,5 +1,6 @@
 package com.pos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pos.dto.OrderDto;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Customer {
     private Long ntn;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
+    @JsonIgnore
     private List<Order> orderList;
 
     public List<Order> getOrderList() {

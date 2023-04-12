@@ -108,6 +108,9 @@ public class ProductPOSServiceImpl implements POSService<Product> {
             else if (product.getExpiryDate()!= null) {
                 patchProduct.setExpiryDate(product.getExpiryDate());
             }
+            else if(product.getPrice()!=null){
+                patchProduct.setPrice(product.getPrice());
+            }
         }
         return patchProduct;
     }

@@ -102,7 +102,10 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                     ProductOrder productOrder = new ProductOrder();
                     productOrder.setProduct(product1);
                     productOrder.setOrder(order);
+                    productOrder.setQuantity(product.getQuantity());
+                    productOrder.setPrice(product.getQuantity()*product1.getPrice());
                     productOrderRepo.save(productOrder);
+
                 }
             });
         });
