@@ -13,8 +13,6 @@ import java.util.Set;
 @Table(name = "orders")
 public class Order {
 
-    //3 capsule 1 mnzinc 1 cef100
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_id")
@@ -38,6 +36,20 @@ public class Order {
     @JsonIgnore
     private Customer customer;
 
+
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+    @JoinTable(name = "order_discount",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "discount_id"))
+    private List<Discount> discounts;
+
+    public List<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(List<Discount> discounts) {
+        this.discounts = discounts;
+    }
 
     public Customer getCustomer() {
         return customer;

@@ -1,7 +1,9 @@
-//package com.pos.repository;
-//
-//import com.pos.entity.DiscountEntity;
-//import org.springframework.data.jpa.repository.JpaRepository;
-//
-//public interface DiscountRepository extends JpaRepository<DiscountEntity,Long> {
-//}
+package com.pos.repository;
+
+import com.pos.entity.Discount;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface DiscountRepository extends JpaRepository<Discount,Long>{
+}

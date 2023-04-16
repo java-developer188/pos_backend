@@ -3,6 +3,7 @@ package com.pos.services;
 import com.pos.adapter.CustomerAdapterImpl;
 import com.pos.adapter.OrderAdapterImpl;
 import com.pos.dto.CustomerDto;
+import com.pos.dto.OrderDto;
 import com.pos.entity.Customer;
 import com.pos.entity.Order;
 import com.pos.entity.Product;
@@ -13,6 +14,7 @@ import com.pos.repository.CustomerRepository;
 import com.pos.repository.OrderRepository;
 import com.pos.repository.ProductOrderRepository;
 import com.pos.repository.ProductRepository;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,35 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
 
     @Autowired
     ProductOrderRepository productOrderRepo;
+
+
+    public Long calculateDiscount(List<Integer> totalAmount,OrderDto orderDto){
+      int total = 0;
+        for (Integer value :totalAmount) {
+            total += value;
+        }
+        int sum = total;
+
+       ArrayList<Long> amountList = new ArrayList<>();
+
+        orderDto.getDiscountList().forEach(discount -> {
+            int i=0;
+            Long discountedValue=0l;
+            if(amountList.size()==0) {
+                discountedValue = sum - (sum * (discount.getDiscountPercentage()) / 100);
+                amountList.add(discountedValue);
+            }
+            else{
+                i= amountList.size()-1;
+                discountedValue = amountList.get(i) - (amountList.get(i) * (discount.getDiscountPercentage()) / 100);
+                amountList.add(discountedValue);
+            }
+
+      });
+        Long finalAmount= 0l;
+        finalAmount = amountList.get(amountList.size()-1);
+    return finalAmount;
+    }
 
     @Override
     public List<Customer> findAll() {
@@ -91,6 +122,7 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
 
         OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
 
+        List<Integer> amountList = new ArrayList<>();
         customerDto.getOrderDtoList().forEach(orderDto -> {
            Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
             orderList.add(order);
@@ -103,11 +135,14 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                     productOrder.setProduct(product1);
                     productOrder.setOrder(order);
                     productOrder.setQuantity(product.getQuantity());
-                    productOrder.setPrice(product.getQuantity()*product1.getPrice());
+                    int totalPrice = product.getQuantity()*product1.getPrice();
+                    productOrder.setPrice(totalPrice);
+                    amountList.add(totalPrice);
                     productOrderRepo.save(productOrder);
-
                 }
             });
+            order.setTotalAmount(calculateDiscount(amountList,orderDto));
+
         });
         Customer customer = customer1;
         orderList.forEach(order -> {
