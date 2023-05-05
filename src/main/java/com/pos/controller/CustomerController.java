@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pos.dto.CustomerDto;
 import com.pos.entity.Customer;
 import com.pos.exception.NameException;
+import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.CustomerRepository;
+import com.pos.response.CustomerResponse;
+import com.pos.response.InventoryResponse;
 import com.pos.services.CustomerPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -92,14 +95,21 @@ public class CustomerController {
     }
 
     @PostMapping("/customer/order")
-    public ResponseEntity<CustomerDto> addCustomerOrder(@RequestBody CustomerDto customer) {
-
+    public ResponseEntity<CustomerResponse> addCustomerOrder(@RequestBody CustomerDto customerDto) {
+        String message = "Customers order has been placed ";
+        CustomerResponse response = null;
         try {
-            customerService.addCustomerWithOrder(customer);
-            return new ResponseEntity<>(HttpStatus.OK);
+            Customer customer = customerService.addCustomerWithOrder(customerDto);
+            response = new CustomerResponse(customer,message);
+
         } catch (NameException nameException) {
-            System.out.println(nameException.getMessage());
-            return new ResponseEntity<>(customer, HttpStatus.NOT_ACCEPTABLE);
+            response = new CustomerResponse(null,"Customers name should be without special characters");
+        }
+        catch (OutOfStockException outOfStockException){
+            response = new CustomerResponse(null,"Product Quantity is more than available stock");
+        }
+        finally {
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.pos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class Inventory {
     private Double soldStock;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "inventoryEntity")
+    @JsonIgnore
     private List<Product> productList;
 
     public List<Product> getProductList() {

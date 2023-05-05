@@ -1,5 +1,7 @@
 package com.pos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -35,6 +37,7 @@ public class Product {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="inventory_id")
+    @JsonIgnore
     private Inventory inventoryEntity;
 
     public Inventory getInventoryEntity() {

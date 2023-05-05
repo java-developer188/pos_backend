@@ -3,9 +3,11 @@ package com.pos.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pos.entity.Inventory;
 import com.pos.entity.Product;
+import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.InventoryRepository;
 import com.pos.repository.ProductRepository;
+import com.pos.response.InventoryResponse;
 import com.pos.services.InventoryPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -81,8 +83,12 @@ public class InventoryController {
     }
 
     @PatchMapping("/inventory/{id}")
-    public Inventory patchInventory(@PathVariable Long id, @RequestBody Inventory inventoryEntity) {
-        return inventoryService.patch(id, inventoryEntity);
+    public ResponseEntity<InventoryResponse> patchInventory(@PathVariable Long id, @RequestBody Inventory inventory) {
+        String message = "Entered Attribute is patched";
+        InventoryResponse response = null;
+        Inventory inventory1 = inventoryService.patch(id, inventory);
+        response = new InventoryResponse(inventory1,message);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @DeleteMapping("/inventory/id/{id}")
     public ResponseEntity<Inventory> deleteCustomer(@PathVariable Long id) {

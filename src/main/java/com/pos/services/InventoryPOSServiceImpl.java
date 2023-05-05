@@ -74,23 +74,17 @@ public class InventoryPOSServiceImpl implements POSService<Inventory> {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Inventory patch(Long id, Inventory inventoryEntity) {
+    public Inventory patch(Long id, Inventory inventory) {
         Inventory patchInventory = null;
-        Optional<Inventory> inventoryEntity1  = inventoryRepo.findById(id);
-        if(inventoryEntity1.isPresent()){
-            patchInventory = inventoryEntity1.get();
-            if (inventoryEntity.getAvailableStock() != null) {
-                patchInventory.setAvailableStock(inventoryEntity.getAvailableStock());
+        Optional<Inventory> optionalInventory  = inventoryRepo.findById(id);
+        if(optionalInventory.isPresent()){
+            patchInventory = optionalInventory.get();
+            if (inventory.getAvailableStock() != null) {
+                patchInventory.setAvailableStock(inventory.getAvailableStock());
             }
-            else if (inventoryEntity.getSoldStock()!= null) {
-                patchInventory.setSoldStock(inventoryEntity.getSoldStock());
+            else if (inventory.getSoldStock()!= null) {
+                patchInventory.setSoldStock(inventory.getSoldStock());
             }
-//            else if (inventoryEntity.inventoryEntity()!= null) {
-//                patchCustomer.setContactInfo(inventoryEntity.getContactInfo());
-//            }
-//            else if (inventoryEntity.getNtn()!= null) {
-//                patchCustomer.setNtn(inventoryEntity.getNtn());
-//            }
         }
         return patchInventory;
     }

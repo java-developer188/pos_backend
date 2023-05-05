@@ -9,6 +9,7 @@ import com.pos.entity.Order;
 import com.pos.entity.Product;
 import com.pos.entity.ProductOrder;
 import com.pos.exception.NameException;
+import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.CustomerRepository;
 import com.pos.repository.OrderRepository;
@@ -106,7 +107,8 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         });
         return customerRepo.save(customer);
     }
-    public void addCustomerWithOrder(CustomerDto customerDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public Customer addCustomerWithOrder(CustomerDto customerDto) {
 
         Optional<Customer> customerOptional = customerRepo.findByContactInfo(customerDto.getContactInfo());
         Customer customer1 = null;
@@ -124,7 +126,7 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         List<Integer> amountList = new ArrayList<>();
 
         customerDto.getOrderDtoList().forEach(orderDto -> {
-           Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
+            Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
             orderList.add(order);
             orderDto.getProductList().forEach(product -> {
                 Optional<Product> productOptional = productRepo.findById(product.getId());
@@ -139,6 +141,22 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                     productOrder.setPrice(totalPrice);
                     amountList.add(totalPrice);
                     productOrderRepo.save(productOrder);
+
+                    double totalStock= product1.getInventoryEntity().getAvailableStock();
+                    int productQuantityInOrder = product.getQuantity();
+                    double totalSoldStock =product1.getInventoryEntity().getSoldStock();
+                    if(productQuantityInOrder<totalStock) {
+                    product1.getInventoryEntity().setAvailableStock(totalStock-productQuantityInOrder);
+                        if(totalSoldStock>0){
+                            product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder+totalSoldStock);
+                        }
+                        else {
+                            product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder);
+                        }
+                    }
+                    else {
+                        throw new OutOfStockException("Product Quantity is more then stock present in inventory");
+                    }
                 }
             });
             order.setTotalAmount(calculateDiscount(amountList,orderDto));
@@ -147,9 +165,9 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         Customer customer = customer1;
         orderList.forEach(order -> {
             order.setCustomer(customer);
-
         });
-        customerRepo.save(customer1);
+
+       return customerRepo.save(customer1);
     }
     @Override
     public void deleteUsingId(Long id) {
