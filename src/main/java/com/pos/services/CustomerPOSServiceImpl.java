@@ -110,6 +110,11 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
     @Transactional(rollbackFor = Exception.class)
     public Customer addCustomerWithOrder(CustomerDto customerDto) {
 
+        if ( null != customerDto.getName() ) {
+            if (!customerDto.getName().matches("^[a-zA-Z\\s]+")) {
+                throw new NameException("Only alphabets and spaces are allowed for customer's name.");
+            }
+        }
         Optional<Customer> customerOptional = customerRepo.findByContactInfo(customerDto.getContactInfo());
         Customer customer1 = null;
         CustomerAdapterImpl customerAdapter = new CustomerAdapterImpl();
