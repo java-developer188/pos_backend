@@ -1,6 +1,6 @@
 package com.pos.services;
 
-import com.pos.entity.InventoryEntity;
+import com.pos.entity.Inventory;
 import com.pos.entity.Product;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.InventoryRepository;
@@ -13,19 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class InventoryPOSServiceImpl implements POSService<InventoryEntity> {
+public class InventoryPOSServiceImpl implements POSService<Inventory> {
     @Autowired
     InventoryRepository inventoryRepo;
 
 
     @Override
     public List findAll() {
-        List<InventoryEntity> inventoryEntityList= inventoryRepo.findAll();
+        List<Inventory> inventoryEntityList= inventoryRepo.findAll();
         return inventoryEntityList;
     }
 
     @Override
-    public InventoryEntity add(InventoryEntity inventoryEntity) {
+    public Inventory add(Inventory inventoryEntity) {
         List<Product> productList=new ArrayList<>();
         inventoryEntity.getProductList().forEach(product -> {
             productList.add(product);
@@ -41,7 +41,7 @@ public class InventoryPOSServiceImpl implements POSService<InventoryEntity> {
 
     @Override
     public void deleteUsingId(Long id) {
-        Optional<InventoryEntity> inventoryEntity = inventoryRepo.findById(id);
+        Optional<Inventory> inventoryEntity = inventoryRepo.findById(id);
         if(inventoryEntity.isPresent()){
             inventoryRepo.delete(inventoryEntity.get());
         }
@@ -58,9 +58,9 @@ public class InventoryPOSServiceImpl implements POSService<InventoryEntity> {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public InventoryEntity update(Long id, InventoryEntity inventoryEntity) {
-        InventoryEntity updateInventory = null;
-        Optional<InventoryEntity> inventoryEntity1 = inventoryRepo.findById(inventoryEntity.getId());
+    public Inventory update(Long id, Inventory inventoryEntity) {
+        Inventory updateInventory = null;
+        Optional<Inventory> inventoryEntity1 = inventoryRepo.findById(inventoryEntity.getId());
         if(inventoryEntity1.isPresent()){
             updateInventory = inventoryEntity1.get();
             updateInventory.setAvailableStock(inventoryEntity.getAvailableStock());
@@ -74,9 +74,9 @@ public class InventoryPOSServiceImpl implements POSService<InventoryEntity> {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public InventoryEntity patch(Long id, InventoryEntity inventoryEntity) {
-        InventoryEntity patchInventory = null;
-        Optional<InventoryEntity> inventoryEntity1  = inventoryRepo.findById(id);
+    public Inventory patch(Long id, Inventory inventoryEntity) {
+        Inventory patchInventory = null;
+        Optional<Inventory> inventoryEntity1  = inventoryRepo.findById(id);
         if(inventoryEntity1.isPresent()){
             patchInventory = inventoryEntity1.get();
             if (inventoryEntity.getAvailableStock() != null) {

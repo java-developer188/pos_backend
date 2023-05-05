@@ -26,7 +26,7 @@ public class Order {
 
     @Column(name = "order_status")
     //@Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private String status;
 
     @OneToMany(mappedBy = "order")
     List<ProductOrder> productOrders;
@@ -67,11 +67,11 @@ public class Order {
         this.id = id;
     }
 
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

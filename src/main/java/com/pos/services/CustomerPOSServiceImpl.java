@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,10 +120,9 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
 
         List<Product> productList = new ArrayList<>();
         List<Order> orderList = new ArrayList<>();
-
         OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
-
         List<Integer> amountList = new ArrayList<>();
+
         customerDto.getOrderDtoList().forEach(orderDto -> {
            Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
             orderList.add(order);
@@ -142,11 +142,12 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                 }
             });
             order.setTotalAmount(calculateDiscount(amountList,orderDto));
-
+            order.setStatus("Pending");
         });
         Customer customer = customer1;
         orderList.forEach(order -> {
             order.setCustomer(customer);
+
         });
         customerRepo.save(customer1);
     }

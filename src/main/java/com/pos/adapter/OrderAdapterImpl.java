@@ -9,6 +9,7 @@ public class OrderAdapterImpl implements PosAdapter<OrderDto, Order>{
     public Order convertDtoToDao(OrderDto orderDto) {
         Order order = new Order();
         order.setOrderDate(orderDto.getOrderDate());
+        order.setStatus(orderDto.getOrderStatus());
         return order;
     }
 

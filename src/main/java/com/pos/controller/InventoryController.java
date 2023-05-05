@@ -1,10 +1,11 @@
 package com.pos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pos.entity.InventoryEntity;
-import com.pos.exception.NameException;
+import com.pos.entity.Inventory;
+import com.pos.entity.Product;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.InventoryRepository;
+import com.pos.repository.ProductRepository;
 import com.pos.services.InventoryPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -28,21 +30,27 @@ public class InventoryController {
     @Autowired
     InventoryPOSServiceImpl inventoryService;
 
+    @Autowired
+    ProductRepository productRepository;
 
     @PostMapping("/inventory/import")
     public ResponseEntity<String> importData(@RequestParam("file") MultipartFile file) /*throws IOException*/ {
         try {
-            List<InventoryEntity> inventoryEntityList = new ArrayList<>();
+            List<Inventory> inventoryEntityList = new ArrayList<>();
+
+
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
-                InventoryEntity inventoryEntity = new InventoryEntity();
-                inventoryEntity.setAvailableStock(Long.valueOf(row.getCell(0).getStringCellValue()));
-                inventoryEntity.setSoldStock(Long.valueOf(row.getCell(1).getStringCellValue()));
-
-
-                inventoryEntityList.add(inventoryEntity);
-            }
+                Inventory inventory = new Inventory();
+               Optional<Product> productOptional = productRepository.findByName(row.getCell(0).getStringCellValue());
+               if(productOptional.isPresent()) {
+                    Product product = productOptional.get();
+                    product.setInventoryEntity(inventory);
+                    inventory.setAvailableStock(row.getCell(1).getNumericCellValue());
+                   inventoryEntityList.add(inventory);
+               }
+               }
             workbook.close();
             inventoryRepo.saveAll(inventoryEntityList);
             ObjectMapper objectMapper = new ObjectMapper();
@@ -54,42 +62,36 @@ public class InventoryController {
         }
 
     }
-
-
     @GetMapping("/inventory")
-    public ResponseEntity<List<InventoryEntity>> getInventory() {
+    public ResponseEntity<List<Inventory>> getInventory() {
         //return new ResponseEntity<>(playerRepo.findAllNames(), HttpStatus.OK);
         return new ResponseEntity<>(inventoryService.findAll(), HttpStatus.OK);
     }
 
-
-
     @PostMapping("/inventory")
-    public ResponseEntity<InventoryEntity> addInventory(@RequestBody InventoryEntity inventoryEntity) {
+    public ResponseEntity<Inventory> addInventory(@RequestBody Inventory inventoryEntity) {
             inventoryService.add(inventoryEntity);
-            return new ResponseEntity<InventoryEntity>(HttpStatus.OK);
+            return new ResponseEntity<Inventory>(HttpStatus.OK);
 
         }
-
-
     @PutMapping("/inventory/{id}")
-    public ResponseEntity<InventoryEntity> updateCustomer(@PathVariable Long id, @RequestBody InventoryEntity inventoryEntity) {
+    public ResponseEntity<Inventory> updateCustomer(@PathVariable Long id, @RequestBody Inventory inventoryEntity) {
         inventoryService.update(id, inventoryEntity);
-        return new ResponseEntity<InventoryEntity>(HttpStatus.OK);
+        return new ResponseEntity<Inventory>(HttpStatus.OK);
     }
 
     @PatchMapping("/inventory/{id}")
-    public InventoryEntity patchInventory(@PathVariable Long id, @RequestBody InventoryEntity inventoryEntity) {
+    public Inventory patchInventory(@PathVariable Long id, @RequestBody Inventory inventoryEntity) {
         return inventoryService.patch(id, inventoryEntity);
     }
     @DeleteMapping("/inventory/id/{id}")
-    public ResponseEntity<InventoryEntity> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<Inventory> deleteCustomer(@PathVariable Long id) {
         try {
             inventoryService.deleteUsingId(id);
-            return new ResponseEntity<InventoryEntity>(HttpStatus.OK);
+            return new ResponseEntity<Inventory>(HttpStatus.OK);
         } catch (RecordNotFoundException recordNotFoundException) {
             System.out.println(recordNotFoundException.getMessage());
-            return new ResponseEntity<InventoryEntity>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Inventory>(HttpStatus.NOT_FOUND);
         }
     }
 

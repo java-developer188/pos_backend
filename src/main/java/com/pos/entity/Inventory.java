@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "inventory")
-public class InventoryEntity {
+public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,10 +14,10 @@ public class InventoryEntity {
     private Long id;
 
     @Column(name = "available_stock")
-    private Long availableStock;
+    private Double availableStock;
 
     @Column(name = "sold_stock")
-    private Long soldStock;
+    private Double soldStock;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "inventoryEntity")
     private List<Product> productList;
@@ -46,20 +46,19 @@ public class InventoryEntity {
         this.id = id;
     }
 
-    public Long getAvailableStock() {
+    public Double getAvailableStock() {
         return availableStock;
     }
 
-    public void setAvailableStock(Long availableStock) {
+    public void setAvailableStock(Double availableStock) {
         this.availableStock = availableStock;
     }
 
-    public Long getSoldStock() {
+    public Double getSoldStock() {
         return soldStock;
     }
 
-    public void setSoldStock(Long soldStock) {
+    public void setSoldStock(Double soldStock) {
         this.soldStock = soldStock;
     }
-
 }

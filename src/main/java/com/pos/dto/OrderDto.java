@@ -13,6 +13,8 @@ public class OrderDto {
 
     private Date orderDate;
 
+    private String orderStatus;
+
     private List<Product> productList;
 
     private CustomerDto customer;
@@ -57,5 +59,13 @@ public class OrderDto {
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

@@ -35,13 +35,13 @@ public class Product {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="inventory_id")
-    private InventoryEntity inventoryEntity;
+    private Inventory inventoryEntity;
 
-    public InventoryEntity getInventoryEntity() {
+    public Inventory getInventoryEntity() {
         return inventoryEntity;
     }
 
-    public void setInventoryEntity(InventoryEntity inventoryEntity) {
+    public void setInventoryEntity(Inventory inventoryEntity) {
         this.inventoryEntity = inventoryEntity;
     }
 
