@@ -20,26 +20,19 @@ public class OrderController {
     
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getOrders() {
-        //return new ResponseEntity<>(playerRepo.findAllNames(), HttpStatus.OK);
         return new ResponseEntity<>(orderServiceImpl.findAll(), HttpStatus.OK);
     }
 
-//    @GetMapping("/order/names")
-//    public ResponseEntity<List<String>> getOrderNames() {
-//        return new ResponseEntity<>(orderServiceImpl.findAllOrderNames(), HttpStatus.OK);
-//
-//    }
-
-//    @GetMapping("/order/{name}")
-//    public ResponseEntity<Order> getOrderByName(@PathVariable String name) {
-//        try {
-//            Order order = orderServiceImpl.findByOrderName(name);
-//            return new ResponseEntity<>(order, HttpStatus.OK);
-//        } catch (RecordNotFoundException recordNotFoundException) {
-//            System.out.println(recordNotFoundException.getMessage());
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @GetMapping("/order/{name}")
+    public ResponseEntity<List<Order>> getOrderByCustomerName(@PathVariable String name) {
+        try {
+            List<Order> orderList = orderServiceImpl.findByCustomerName(name);
+            return new ResponseEntity<>(orderList, HttpStatus.OK);
+        } catch (RecordNotFoundException recordNotFoundException) {
+            System.out.println(recordNotFoundException.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/order")
     public ResponseEntity<Order> addOrders(@RequestBody Order order) {

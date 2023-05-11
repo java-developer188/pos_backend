@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
-    @Query(value = "SELECT c.customer_name FROM products c",nativeQuery = true)
+    @Query(value = "SELECT c.customer_name FROM customers c",nativeQuery = true)
     List<String> findAllNames();
 
     Optional<Customer> findByName(String name);

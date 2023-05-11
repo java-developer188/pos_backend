@@ -20,12 +20,13 @@ public class OrderPOSServiceImpl implements POSService<Order> {
         List<Order> orderList = orderRepository.findAll();
         return orderList;
     }
+    public List<Order> findByCustomerName(String name) {
+        List<Order> orderList = orderRepository.findByCustomerName(name);
+        return orderList;
+    }
 
     @Override
     public Order add(Order order) {
-//        Order order1 = null;
-//        Customer customer = order.getCustomerEntity();
-//        order1.setCustomerEntity(customer);
         return orderRepository.save(order);
     }
 
@@ -42,8 +43,8 @@ public class OrderPOSServiceImpl implements POSService<Order> {
 
     @Override
     public void deleteUsingName(String name) {
-
     }
+
 
     @Override
     public Order update(Long id, Order order) {

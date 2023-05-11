@@ -67,6 +67,25 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
     return finalAmount;
     }
 
+    public void updateStockInInventory(int productQuantityInOrder, Product product1 ) {
+
+        double totalStock= product1.getInventoryEntity().getAvailableStock();
+        double totalSoldStock =product1.getInventoryEntity().getSoldStock();
+
+        if (productQuantityInOrder < totalStock) {
+            product1.getInventoryEntity().setAvailableStock(totalStock - productQuantityInOrder);
+
+
+            if (totalSoldStock > 0) {
+                product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder + totalSoldStock);
+            } else {
+                product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder);
+            }
+        } else {
+            throw new OutOfStockException("Product Quantity is more than stock present in inventory");
+        }
+    }
+
     @Override
     public List<Customer> findAll() {
         List<Customer> customerList = customerRepo.findAll();
@@ -130,43 +149,36 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
         List<Integer> amountList = new ArrayList<>();
 
-        customerDto.getOrderDtoList().forEach(orderDto -> {
-            Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
-            orderList.add(order);
-            orderDto.getProductList().forEach(product -> {
-                Optional<Product> productOptional = productRepo.findById(product.getId());
-                if(productOptional.isPresent()){
-                    Product product1 = productOptional.get();
-                    productList.add(product1);
-                    ProductOrder productOrder = new ProductOrder();
-                    productOrder.setProduct(product1);
-                    productOrder.setOrder(order);
-                    productOrder.setQuantity(product.getQuantity());
-                    int totalPrice = product.getQuantity()*product1.getPrice();
-                    productOrder.setPrice(totalPrice);
-                    amountList.add(totalPrice);
-                    productOrderRepo.save(productOrder);
+        try {
+            customerDto.getOrderDtoList().forEach(orderDto -> {
+                Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
+                orderList.add(order);
+                orderDto.getProductList().forEach(product -> {
+                    Optional<Product> productOptional = productRepo.findById(product.getId());
+                    if (productOptional.isPresent()) {
+                        Product product1 = productOptional.get();
+                        productList.add(product1);
+                        ProductOrder productOrder = new ProductOrder();
+                        productOrder.setProduct(product1);
+                        productOrder.setOrder(order);
+                        productOrder.setQuantity(product.getQuantity());
+                        int totalPrice = product.getQuantity() * product1.getPrice();
+                        productOrder.setPrice(totalPrice);
+                        amountList.add(totalPrice);
+                        productOrderRepo.save(productOrder);
 
-                    double totalStock= product1.getInventoryEntity().getAvailableStock();
-                    int productQuantityInOrder = product.getQuantity();
-                    double totalSoldStock =product1.getInventoryEntity().getSoldStock();
-                    if(productQuantityInOrder<totalStock) {
-                    product1.getInventoryEntity().setAvailableStock(totalStock-productQuantityInOrder);
-                        if(totalSoldStock>0){
-                            product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder+totalSoldStock);
-                        }
-                        else {
-                            product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder);
-                        }
+                        int productQuantityInOrder = product.getQuantity();
+                        updateStockInInventory(productQuantityInOrder,product1);
                     }
-                    else {
-                        throw new OutOfStockException("Product Quantity is more then stock present in inventory");
-                    }
-                }
+                });
+                order.setTotalAmount(calculateDiscount(amountList, orderDto));
+                order.setStatus("Pending");
+
             });
-            order.setTotalAmount(calculateDiscount(amountList,orderDto));
-            order.setStatus("Pending");
-        });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         Customer customer = customer1;
         orderList.forEach(order -> {
             order.setCustomer(customer);

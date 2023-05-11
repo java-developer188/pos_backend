@@ -5,6 +5,7 @@ import com.pos.enums.OrderStatus;
 
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class Order {
     private Long totalAmount;
 
     @Column(name=" order_date")
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
     @Column(name = "order_status")
     //@Enumerated(EnumType.STRING)
@@ -91,11 +92,11 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 }

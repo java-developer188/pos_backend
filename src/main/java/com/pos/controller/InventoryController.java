@@ -50,6 +50,7 @@ public class InventoryController {
                     Product product = productOptional.get();
                     product.setInventoryEntity(inventory);
                     inventory.setAvailableStock(row.getCell(1).getNumericCellValue());
+                    inventory.setSoldStock(row.getCell(2).getNumericCellValue());
                    inventoryEntityList.add(inventory);
                }
                }
