@@ -39,8 +39,6 @@ public class InventoryController {
     public ResponseEntity<String> importData(@RequestParam("file") MultipartFile file) /*throws IOException*/ {
         try {
             List<Inventory> inventoryEntityList = new ArrayList<>();
-
-
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
@@ -48,10 +46,10 @@ public class InventoryController {
                Optional<Product> productOptional = productRepository.findByName(row.getCell(0).getStringCellValue());
                if(productOptional.isPresent()) {
                     Product product = productOptional.get();
-                    product.setInventoryEntity(inventory);
+                    product.setInventory(inventory);
                     inventory.setAvailableStock(row.getCell(1).getNumericCellValue());
                     inventory.setSoldStock(row.getCell(2).getNumericCellValue());
-                   inventoryEntityList.add(inventory);
+                    inventoryEntityList.add(inventory);
                }
                }
             workbook.close();
@@ -59,30 +57,26 @@ public class InventoryController {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(inventoryEntityList);
             return ResponseEntity.ok(json);
-        } catch (IOException ioException) {
+          }
+        catch (IOException ioException) {
             System.out.println("IO Exception");
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
     }
     @GetMapping("/inventory")
     public ResponseEntity<List<Inventory>> getInventory() {
-        //return new ResponseEntity<>(playerRepo.findAllNames(), HttpStatus.OK);
         return new ResponseEntity<>(inventoryService.findAll(), HttpStatus.OK);
     }
-
     @PostMapping("/inventory")
-    public ResponseEntity<Inventory> addInventory(@RequestBody Inventory inventoryEntity) {
-            inventoryService.add(inventoryEntity);
+    public ResponseEntity<Inventory> addInventory(@RequestBody Inventory inventory) {
+            inventoryService.add(inventory);
             return new ResponseEntity<Inventory>(HttpStatus.OK);
-
-        }
+    }
     @PutMapping("/inventory/{id}")
-    public ResponseEntity<Inventory> updateCustomer(@PathVariable Long id, @RequestBody Inventory inventoryEntity) {
-        inventoryService.update(id, inventoryEntity);
+    public ResponseEntity<Inventory> updateCustomer(@PathVariable Long id, @RequestBody Inventory inventory) {
+        inventoryService.update(id, inventory);
         return new ResponseEntity<Inventory>(HttpStatus.OK);
     }
-
     @PatchMapping("/inventory/{id}")
     public ResponseEntity<InventoryResponse> patchInventory(@PathVariable Long id, @RequestBody Inventory inventory) {
         String message = "Entered Attribute is patched";
@@ -101,10 +95,5 @@ public class InventoryController {
             return new ResponseEntity<Inventory>(HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
-
 
 }

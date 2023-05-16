@@ -35,17 +35,26 @@ public class Product {
     @OneToMany(mappedBy = "product")
     Set<ProductOrder> productOrders;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="inventory_id")
     @JsonIgnore
-    private Inventory inventoryEntity;
+    private Inventory inventory;
 
-    public Inventory getInventoryEntity() {
-        return inventoryEntity;
+//    public Inventory getInventoryEntity() {
+//        return inventoryEntity;
+//    }
+//
+//    public void setInventoryEntity(Inventory inventoryEntity) {
+//        this.inventoryEntity = inventoryEntity;
+//    }
+
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
-    public void setInventoryEntity(Inventory inventoryEntity) {
-        this.inventoryEntity = inventoryEntity;
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public Integer getQuantity() {
@@ -107,8 +116,6 @@ public class Product {
     public String getMfgDate() {
         return mfgDate;
     }
-
-
 
     public void setMfgDate(String mfgDate) {
         this.mfgDate = mfgDate;

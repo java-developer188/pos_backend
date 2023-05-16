@@ -56,21 +56,16 @@ public class CustomerController {
             System.out.println("IO Exception");
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
     }
-
     @GetMapping("/customer")
     public ResponseEntity<List<Customer>> getCustomers() {
-        //return new ResponseEntity<>(playerRepo.findAllNames(), HttpStatus.OK);
+
         return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
-
     @GetMapping("/customer/names")
     public ResponseEntity<List<String>> getCustomerNames() {
         return new ResponseEntity<>(customerService.findAllCustomerNames(), HttpStatus.OK);
-
     }
-
     @GetMapping("/customer/{name}")
     public ResponseEntity<Customer> getCustomerByName(@PathVariable String name) {
         try {
@@ -81,7 +76,6 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
     @PostMapping("/customer")
     public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
 
@@ -93,7 +87,6 @@ public class CustomerController {
             return new ResponseEntity<>(customer, HttpStatus.NOT_ACCEPTABLE);
         }
     }
-
     @PostMapping("/customer/order")
     public ResponseEntity<CustomerResponse> addCustomerOrder(@RequestBody CustomerDto customerDto) {
         String message = "Customers order has been placed ";
@@ -112,19 +105,14 @@ public class CustomerController {
             return new ResponseEntity<>(response,HttpStatus.OK);
         }
     }
-
     @PutMapping("/customer/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
-        customerService.update(id, customer);
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {customerService.update(id, customer);
         return new ResponseEntity<Customer>(HttpStatus.OK);
     }
-
-
     @PatchMapping("/customer/{id}")
     public Customer patchCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         return customerService.patch(id, customer);
     }
-
     @DeleteMapping("/customer/id/{id}")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable Long id) {
         try {
@@ -135,7 +123,6 @@ public class CustomerController {
             return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
         }
     }
-
     @DeleteMapping("/customer/name/{name}")
     public ResponseEntity<Customer> deleteCustomerUsingName(@PathVariable String name) {
         try {
@@ -146,8 +133,6 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 }
 
 

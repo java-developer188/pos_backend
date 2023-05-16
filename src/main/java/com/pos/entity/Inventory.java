@@ -21,25 +21,25 @@ public class Inventory {
     @Column(name = "sold_stock")
     private Double soldStock;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "inventoryEntity")
-    @JsonIgnore
-    private List<Product> productList;
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "inventory")
+    //@JsonIgnore
+    private Product product;
 
-    public List<Product> getProductList() {
-        return productList;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public void addProduct(Product product){
-        if(productList==null){
-            productList = new ArrayList<>();
-        }
-        productList.add(product);
-
-    }
+//    public void addProduct(Product product){
+//        if(productList==null){
+//            productList = new ArrayList<>();
+//        }
+//        productList.add(product);
+//
+//    }
 
     public Long getId() {
         return id;

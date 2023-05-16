@@ -80,7 +80,7 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         Product updateProduct = null;
         Optional<Product> productOptional = productRepository.findById(product.getId());
         if(productOptional.isPresent()){
-           updateProduct = productOptional.get();
+            updateProduct = productOptional.get();
             updateProduct.setName(product.getName());
             updateProduct.setBatchNum(product.getBatchNum());
             updateProduct.setMfgDate(product.getMfgDate());

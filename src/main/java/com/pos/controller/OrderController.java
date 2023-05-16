@@ -69,16 +69,4 @@ public class OrderController {
         }
     }
 
-//    @DeleteMapping("/order/name/{name}")
-//    public ResponseEntity<Order> deleteOrderUsingName(@PathVariable String name) {
-//        try {
-//            orderServiceImpl.deleteUsingName(name);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (RecordNotFoundException recordNotFoundException) {
-//            System.out.println(recordNotFoundException.getMessage());
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-    
-    
 }

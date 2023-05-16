@@ -26,15 +26,15 @@ public class InventoryPOSServiceImpl implements POSService<Inventory> {
 
     @Override
     public Inventory add(Inventory inventoryEntity) {
-        List<Product> productList=new ArrayList<>();
-        inventoryEntity.getProductList().forEach(product -> {
-            productList.add(product);
-        });
-        productList.forEach(product1 ->{
-            product1.setInventoryEntity(inventoryEntity);
-            inventoryEntity.addProduct(product1);
-        });
-        return inventoryRepo.save(inventoryEntity);
+//        List<Product> productList=new ArrayList<>();
+//        inventoryEntity.getProductList().forEach(product -> {
+//            productList.add(product);
+//        });
+//        productList.forEach(product1 ->{
+//            product1.setInventoryEntity(inventoryEntity);
+//            inventoryEntity.addProduct(product1);
+//        });
+       return inventoryRepo.save(inventoryEntity);
     }
 
 
@@ -65,8 +65,6 @@ public class InventoryPOSServiceImpl implements POSService<Inventory> {
             updateInventory = inventoryEntity1.get();
             updateInventory.setAvailableStock(inventoryEntity.getAvailableStock());
             updateInventory.setSoldStock(inventoryEntity.getSoldStock());
-            //updateInventory.setContactInfo(inventoryEntity.getContactInfo());
-
         }
         return updateInventory;
 

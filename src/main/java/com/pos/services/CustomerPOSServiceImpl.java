@@ -69,17 +69,15 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
 
     public void updateStockInInventory(int productQuantityInOrder, Product product1 ) {
 
-        double totalStock= product1.getInventoryEntity().getAvailableStock();
-        double totalSoldStock =product1.getInventoryEntity().getSoldStock();
+        double totalStock= product1.getInventory().getAvailableStock();
+        double totalSoldStock =product1.getInventory().getSoldStock();
 
         if (productQuantityInOrder < totalStock) {
-            product1.getInventoryEntity().setAvailableStock(totalStock - productQuantityInOrder);
-
-
+            product1.getInventory().setAvailableStock(totalStock - productQuantityInOrder);
             if (totalSoldStock > 0) {
-                product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder + totalSoldStock);
+                product1.getInventory().setSoldStock((double) productQuantityInOrder + totalSoldStock);
             } else {
-                product1.getInventoryEntity().setSoldStock((double) productQuantityInOrder);
+                product1.getInventory().setSoldStock((double) productQuantityInOrder);
             }
         } else {
             throw new OutOfStockException("Product Quantity is more than stock present in inventory");
@@ -91,14 +89,11 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         List<Customer> customerList = customerRepo.findAll();
         return customerList;
     }
-
     public List<String> findAllCustomerNames(){
         List<String> customerNames= customerRepo.findAllNames();
         return customerNames;
     }
-
     public Customer findByCustomerName(String name) throws RecordNotFoundException {
-
         Optional<Customer> customerEntity = customerRepo.findByName(name);
         Customer customer1 = null;
         if(customerEntity.isPresent()){
@@ -143,7 +138,6 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         else{
             customer1 = customerRepo.save(customerAdapter.convertDtoToDao(customerDto));
         }
-
         List<Product> productList = new ArrayList<>();
         List<Order> orderList = new ArrayList<>();
         OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
@@ -173,7 +167,6 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                 });
                 order.setTotalAmount(calculateDiscount(amountList, orderDto));
                 order.setStatus("Pending");
-
             });
         }
         catch (Exception e){
@@ -183,7 +176,6 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         orderList.forEach(order -> {
             order.setCustomer(customer);
         });
-
        return customerRepo.save(customer1);
     }
     @Override
