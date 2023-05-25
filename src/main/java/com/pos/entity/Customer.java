@@ -1,7 +1,6 @@
 package com.pos.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pos.dto.OrderDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;

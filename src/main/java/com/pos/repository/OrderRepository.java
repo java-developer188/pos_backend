@@ -1,10 +1,8 @@
 package com.pos.repository;
 
 import com.pos.entity.Order;
-import org.hibernate.annotations.Target;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

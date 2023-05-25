@@ -1,7 +1,5 @@
 package com.pos.dto;
 
-import com.pos.entity.Order;
-
 import java.util.List;
 
 public class CustomerDto {

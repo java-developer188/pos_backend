@@ -1,6 +1,5 @@
 package com.pos.controller;
 
-import com.pos.entity.Customer;
 import com.pos.entity.Discount;
 import com.pos.exception.NameException;
 import com.pos.repository.DiscountRepository;

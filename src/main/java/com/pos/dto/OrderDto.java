@@ -1,6 +1,5 @@
 package com.pos.dto;
 
-import com.pos.entity.Customer;
 import com.pos.entity.Discount;
 import com.pos.entity.Product;
 

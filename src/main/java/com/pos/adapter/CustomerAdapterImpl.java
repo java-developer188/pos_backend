@@ -3,7 +3,7 @@ package com.pos.adapter;
 import com.pos.dto.CustomerDto;
 import com.pos.entity.Customer;
 
-public class CustomerAdapterImpl implements PosAdapter<CustomerDto, Customer>{
+public class CustomerAdapterImpl implements BasePosAdapter<CustomerDto, Customer>{
 
     @Override
     public Customer convertDtoToDao(CustomerDto customerDto) {
