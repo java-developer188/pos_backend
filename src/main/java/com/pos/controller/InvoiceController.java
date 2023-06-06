@@ -27,12 +27,6 @@ public class InvoiceController {
 	
 	@GetMapping("/invoice/create/{id}")
 	 public ResponseEntity<InvoiceResponse> createInvoice(@PathVariable Long id) {
-		if(id!=null) {
-			System.out.println("Not null");
-		}
-		else {
-			System.out.println("null");
-		}
 		InvoiceResponse invoiceResp = invoiceService.generateInvoice(id);
 		if(invoiceResp==null) {
 			System.out.println("problem problem problem");

@@ -12,7 +12,7 @@ import com.pos.entity.ProductOrder;
 import com.pos.response.InvoiceResponse;
 import com.pos.response.Classes.ProductDescription;
 
-public class InvoiceAdapterImpl implements PosAdapter<InvoiceDto, Invoice>{
+public class InvoiceAdapterImpl implements BasePosAdapter<InvoiceDto, Invoice>{
 
 	@Override
 	public Invoice convertDtoToDao(InvoiceDto t) {
