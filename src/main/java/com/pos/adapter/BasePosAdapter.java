@@ -1,6 +1,6 @@
 package com.pos.adapter;
 
-public interface PosAdapter<T,U> {
+public interface BasePosAdapter<T,U> {
 
     public U convertDtoToDao(T t);
     public T convertDaoToDto(U u);

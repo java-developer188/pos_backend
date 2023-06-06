@@ -15,13 +15,11 @@ import com.pos.repository.CustomerRepository;
 import com.pos.repository.OrderRepository;
 import com.pos.repository.ProductOrderRepository;
 import com.pos.repository.ProductRepository;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,9 +128,9 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
     }
     
     @Transactional(rollbackFor = Exception.class)
-    public Customer addCustomerWithOrder(CustomerDto customerDto) {
+    public Customer addCustomerWithOrder(CustomerDto customerDto) throws NameException,OutOfStockException {
 
-        if ( null != customerDto.getName() ) {
+        if ( null != customerDto.getName()) {
             if (!customerDto.getName().matches("^[a-zA-Z\\s]+")) {
                 throw new NameException("Only alphabets and spaces are allowed for customer's name.");
             }
@@ -151,7 +149,6 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
         List<Integer> amountList = new ArrayList<>();
 
-        try {
             customerDto.getOrderDtoList().forEach(orderDto -> {
                 Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
                 orderList.add(order);
@@ -176,15 +173,12 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                 order.setTotalAmount(calculateDiscount(amountList, orderDto));
                 order.setStatus("Pending");
             });
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
         Customer customer = customer1;
         orderList.forEach(order -> {
             order.setCustomer(customer);
         });
-       return customerRepo.save(customer1);
+        return customer1;
+       //return customerRepo.save(customer1);
     }
     @Override
     public void deleteUsingId(Long id) {

@@ -5,7 +5,7 @@ import com.pos.entity.Order;
 
 import java.time.LocalDateTime;
 
-public class OrderAdapterImpl implements PosAdapter<OrderDto, Order>{
+public class OrderAdapterImpl implements BasePosAdapter<OrderDto, Order>{
 
     @Override
     public Order convertDtoToDao(OrderDto orderDto) {
@@ -14,7 +14,6 @@ public class OrderAdapterImpl implements PosAdapter<OrderDto, Order>{
         order.setStatus(orderDto.getOrderStatus());
         return order;
     }
-
     @Override
     public OrderDto convertDaoToDto(Order order) {
         return null;

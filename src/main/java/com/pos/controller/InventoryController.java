@@ -3,7 +3,6 @@ package com.pos.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pos.entity.Inventory;
 import com.pos.entity.Product;
-import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.InventoryRepository;
 import com.pos.repository.ProductRepository;

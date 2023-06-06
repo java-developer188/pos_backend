@@ -1,6 +1,5 @@
 package com.pos.response;
 
-import com.pos.dto.CustomerDto;
 import com.pos.entity.Customer;
 
 public class CustomerResponse {

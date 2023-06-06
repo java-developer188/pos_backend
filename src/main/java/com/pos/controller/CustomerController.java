@@ -8,7 +8,6 @@ import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.CustomerRepository;
 import com.pos.response.CustomerResponse;
-import com.pos.response.InventoryResponse;
 import com.pos.services.CustomerPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
