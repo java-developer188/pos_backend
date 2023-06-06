@@ -40,13 +40,17 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
 
 
     public Long calculateDiscount(List<Integer> totalAmount,OrderDto orderDto){
-      int total = 0;
+      Long total = 0l;
         for (Integer value :totalAmount) {
             total += value;
         }
-        int sum = total;
+        Long sum = total;
 
        ArrayList<Long> amountList = new ArrayList<>();
+       Long finalAmount= 0l;
+       if(null == orderDto.getDiscountList()) {
+    	   return sum;
+       }
 
         orderDto.getDiscountList().forEach(discount -> {
             int i=0;
@@ -62,7 +66,7 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
             }
 
       });
-        Long finalAmount= 0l;
+        
         finalAmount = amountList.get(amountList.size()-1);
     return finalAmount;
     }
@@ -111,6 +115,9 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                 throw new NameException("Only alphabets and spaces are allowed for customer's name.");
             }
         }
+        if(null == customer.getOrderList()) {
+        	return customerRepo.save(customer);
+        }
         List<Order> orderList = new ArrayList<>();
         customer.getOrderList().forEach(order1 ->{
             orderList.add(order1);
@@ -121,6 +128,7 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         });
         return customerRepo.save(customer);
     }
+    
     @Transactional(rollbackFor = Exception.class)
     public Customer addCustomerWithOrder(CustomerDto customerDto) {
 

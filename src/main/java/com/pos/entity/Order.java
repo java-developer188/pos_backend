@@ -37,12 +37,14 @@ public class Order {
     @JsonIgnore
     private Customer customer;
 
-
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @JoinTable(name = "order_discount",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "discount_id"))
     private List<Discount> discounts;
+    
+    @OneToMany(mappedBy = "order")
+    private List<Invoice> invoice; 
 
     public List<Discount> getDiscounts() {
         return discounts;
@@ -99,4 +101,12 @@ public class Order {
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
+
+	public List<Invoice> getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(List<Invoice> invoice) {
+		this.invoice = invoice;
+	}
 }

@@ -1,9 +1,7 @@
 package com.pos.dto;
 
-import com.pos.entity.Customer;
 import com.pos.entity.Discount;
 import com.pos.entity.Product;
-
 import java.util.Date;
 import java.util.List;
 
@@ -20,8 +18,18 @@ public class OrderDto {
     private CustomerDto customer;
 
     private List<Discount> discountList;
+    
+    private List<InvoiceDto> invoice; 
 
-    public List<Discount> getDiscountList() {
+    public List<InvoiceDto> getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(List<InvoiceDto> invoice) {
+		this.invoice = invoice;
+	}
+
+	public List<Discount> getDiscountList() {
         return discountList;
     }
 
