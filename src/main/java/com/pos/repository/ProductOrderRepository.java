@@ -19,6 +19,8 @@ public interface ProductOrderRepository extends JpaRepository<ProductOrder,Long>
     //using positional parameter in the query as ?1 says first parameter ?2 would say second parameter
     @Query(value = "SELECT * FROM product_order o WHERE order_id=?1",nativeQuery = true)
     List<Optional<ProductOrder>> findByOrderId(Long order_id);
-    
+
+    @Query(value = "SELECT SUM(o.product_quantity) FROM product_order o WHERE product_id=?1",nativeQuery = true)
+    Integer calculateTotalSoldProductById(Long product_id);
 
 }

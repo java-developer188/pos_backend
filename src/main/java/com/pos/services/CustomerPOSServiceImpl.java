@@ -4,10 +4,7 @@ import com.pos.adapter.CustomerAdapterImpl;
 import com.pos.adapter.OrderAdapterImpl;
 import com.pos.dto.CustomerDto;
 import com.pos.dto.OrderDto;
-import com.pos.entity.Customer;
-import com.pos.entity.Order;
-import com.pos.entity.Product;
-import com.pos.entity.ProductOrder;
+import com.pos.entity.*;
 import com.pos.exception.NameException;
 import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
@@ -170,8 +167,10 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                         updateStockInInventory(productQuantityInOrder,product1);
                     }
                 });
+                order.setDiscounts(orderDto.getDiscountList());
                 order.setTotalAmount(calculateDiscount(amountList, orderDto));
                 order.setStatus("Pending");
+
             });
         Customer customer = customer1;
         orderList.forEach(order -> {
@@ -193,7 +192,13 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
 
     @Override
     public void deleteUsingName(String name) {
-
+        Optional<Customer> customerEntity = customerRepo.findByName(name);
+        if(customerEntity.isPresent()){
+            customerRepo.delete(customerEntity.get());
+        }
+        else {
+            throw new RecordNotFoundException("Customer not found");
+        }
     }
     @Override
     @Transactional(rollbackFor = Exception.class)

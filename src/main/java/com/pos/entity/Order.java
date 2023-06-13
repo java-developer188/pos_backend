@@ -34,7 +34,7 @@ public class Order {
     @JsonIgnore
     private Customer customer;
 
-    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "order_discount",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "discount_id"))

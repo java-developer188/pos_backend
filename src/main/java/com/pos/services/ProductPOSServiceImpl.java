@@ -3,6 +3,7 @@ package com.pos.services;
 import com.pos.entity.Product;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
+import com.pos.repository.ProductOrderRepository;
 import com.pos.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class ProductPOSServiceImpl implements POSService<Product> {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    ProductOrderRepository productOrderRepo;
+
     @Override
     public List<Product> findAll() {
         List<Product> productList = productRepository.findAll();
@@ -25,6 +29,11 @@ public class ProductPOSServiceImpl implements POSService<Product> {
     public List<String> findAllProductNames(){
         List<String> productNames= productRepository.findAllNames();
         return productNames;
+    }
+
+    public Integer getTotalSoldQuantityOfProductById(Long id){
+        Integer totalSold = productOrderRepo.calculateTotalSoldProductById(id);
+        return totalSold;
     }
 
     public Product findByProductName(String name) throws RecordNotFoundException {

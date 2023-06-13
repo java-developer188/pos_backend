@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pos.entity.Product;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
+import com.pos.repository.ProductOrderRepository;
 import com.pos.repository.ProductRepository;
 import com.pos.services.ProductPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
@@ -80,6 +81,16 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/product/total/{id}")
+    public ResponseEntity<Integer> getTotalSoldQuantityOfProduct(@PathVariable Long id) {
+        try {
+            Integer totalQuantityOfProduct = productService.getTotalSoldQuantityOfProductById(id);
+            return new ResponseEntity<>(totalQuantityOfProduct, HttpStatus.OK);
+        } catch (RecordNotFoundException recordNotFoundException) {
+            System.out.println(recordNotFoundException.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @PostMapping("/product")
     public ResponseEntity<Product> addProducts(@RequestBody Product product) {
 

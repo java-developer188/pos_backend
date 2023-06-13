@@ -27,10 +27,10 @@ public class ExcelExportService {
       
             // Define the data to be populated in the template
             Map<String, String> data = new HashMap<>();
-            data.put("DATE",dataAndTime[0]);
-            data.put("INVOICE_NUM",invoiceResponse.getInvoice_id().toString());
-            data.put("CustomerName",invoiceResponse.getCustomer_name());
-            data.put("CustomerContact",invoiceResponse.getCustomer_contactInfo().toString());
+            data.put("DATE", "DATE: "+ dataAndTime[0]);
+            data.put("INVOICE_NUM","INVOICE # : "+invoiceResponse.getInvoice_id().toString());
+            data.put("CustomerName","Customer Name : "+invoiceResponse.getCustomer_name().toUpperCase());
+            data.put("CustomerContact","Cell # : "+invoiceResponse.getCustomer_contactInfo().toString());
             // Add more key-value pairs as needed
 			
          // Replace the placeholders with the actual data
@@ -54,6 +54,7 @@ public class ExcelExportService {
             cellStyle.setBorderBottom(BorderStyle.THIN);
             cellStyle.setBorderRight(BorderStyle.THIN);
             int count = 1;
+			int totalProductQuantity=0;
             for(ProductDescription desc: invoiceResponse.getProductDesc()) {
             	Row row = sheet.createRow(prodRowNum - 1);
             	Cell cell=row.createCell(0);
@@ -64,13 +65,19 @@ public class ExcelExportService {
                 cell.setCellStyle(cellStyle);
                 cell = row.createCell(2);
                 cell.setCellValue(desc.getQuantity());
+				totalProductQuantity+= desc.getQuantity();
                 cell.setCellStyle(cellStyle);
                 cell = row.createCell(3);
                 cell.setCellValue(desc.getUnitPrice());
                 cell.setCellStyle(cellStyle);
-                cell = row.createCell(4);
+				cell = row.createCell(4);
+				double priceInDouble = desc.getUnitPrice();
+				cell.setCellValue(priceInDouble-(priceInDouble*0.15));
+				cell.setCellStyle(cellStyle);
+				cell = row.createCell(5);
                 cell.setCellValue(desc.getTotalPrice());
                 cell.setCellStyle(cellStyle);
+
 //                cell = row.createCell(5);
 //                cellStyle.setBorderBottom(BorderStyle.THIN);
 //                cellStyle.setBorderRight(BorderStyle.THIN);
@@ -88,36 +95,45 @@ public class ExcelExportService {
             	cell.setCellStyle(cellStyle);
             	cell = row.createCell(4);
             	cell.setCellStyle(cellStyle);
-            	
-            
-            	//prodRowNum++;
+
+
+//			    row=sheet.createRow(prodRowNum-1);
+//			    cell=row.createCell(1);
+//			    cell.setCellValue("TOTAL QUANTITY");
+//			    cellFontColor(workbook, cell);
+//			    cell = row.createCell(2);
+//			    cell.setCellValue(totalQuantity);
+//			    cellFontColor(workbook, cell);
+//			    setCellHeight(sheet, prodRowNum-1, 30);
+//			    prodRowNum++;
+
             	row=sheet.createRow(prodRowNum-1);
-            	cell=row.createCell(3);
+            	cell=row.createCell(4);
             	cell.setCellValue("SUB TOTAL");
             	cellFontColor(workbook, cell);
-            	cell = row.createCell(4);
+            	cell = row.createCell(5);
             	cell.setCellValue(invoiceResponse.getOrder_total_amount());
             	cellFontColor(workbook, cell);
             	setCellHeight(sheet, prodRowNum-1, 30);
             	prodRowNum++;
             	row=sheet.createRow(prodRowNum-1);
-            	cell=row.createCell(3);
+            	cell=row.createCell(4);
             	cell.setCellValue("DISCOUNT");
             	cellFontColor(workbook, cell);
-            	cell = row.createCell(4);
+            	cell = row.createCell(5);
             	cell.setCellValue(invoiceResponse.getDiscounted_amount());
             	cellFontColor(workbook, cell);
             	setCellHeight(sheet, prodRowNum-1, 30);
             	prodRowNum++;
             	row=sheet.createRow(prodRowNum-1);
-            	cell=row.createCell(3);
+            	cell=row.createCell(4);
             	cell.setCellValue("TOTAL");
             	cellFontColorAndBorder(workbook, cell);
-            	cell = row.createCell(4);
+            	cell = row.createCell(5);
             	cell.setCellValue(invoiceResponse.getOrder_deducted_amount());
             	setCellHeight(sheet, prodRowNum-1, 30);
             	cellFontColorAndBorder(workbook, cell);
-            	
+
             	cellStyle = workbook.createCellStyle();
 	            cellStyle.setBorderRight(BorderStyle.THIN);
 	            

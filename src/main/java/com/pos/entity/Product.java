@@ -40,15 +40,6 @@ public class Product {
     @JsonIgnore
     private Inventory inventory;
 
-//    public Inventory getInventoryEntity() {
-//        return inventoryEntity;
-//    }
-//
-//    public void setInventoryEntity(Inventory inventoryEntity) {
-//        this.inventoryEntity = inventoryEntity;
-//    }
-
-
     public Inventory getInventory() {
         return inventory;
     }

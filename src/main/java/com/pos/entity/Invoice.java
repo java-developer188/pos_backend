@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pos.enums.InvoiceStatus;
 
 @Entity
@@ -34,6 +35,7 @@ public class Invoice {
 	private InvoiceStatus invoiceStatus;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
 	@JoinColumn(name="order_id")
 	private Order order;
 
