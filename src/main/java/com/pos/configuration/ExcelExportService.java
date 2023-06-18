@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,8 @@ public class ExcelExportService {
             
             //playing with date
             String dataAndTime[] = invoiceResponse.getOrder_Date().toString().split("T");
-      
+
+
             // Define the data to be populated in the template
             Map<String, String> data = new HashMap<>();
             data.put("DATE", "DATE: "+ dataAndTime[0]);
@@ -32,7 +34,7 @@ public class ExcelExportService {
             data.put("CustomerName","Customer Name : "+invoiceResponse.getCustomer_name().toUpperCase());
             data.put("CustomerContact","Cell # : "+invoiceResponse.getCustomer_contactInfo().toString());
             // Add more key-value pairs as needed
-			
+
          // Replace the placeholders with the actual data
             for (Row row : sheet) {
                 for (Cell cell : row) {

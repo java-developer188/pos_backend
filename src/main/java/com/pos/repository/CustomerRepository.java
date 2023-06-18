@@ -15,4 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
     Optional<Customer> findByContactInfo(Long contact);
 
+    @Query(value = "Select distinct customer_name from orders as o left join customers as c on o.customer_id=c.customer_id where order_id IN (Select order_id from product_order as po where product_id = :product_id)" , nativeQuery = true)
+    List<String> findCustomerNameByProduct(Long product_id);
+
 }

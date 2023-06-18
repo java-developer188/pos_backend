@@ -75,6 +75,16 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/customer/product/{product_id}")
+    public ResponseEntity<List<String>> getCustomerByProduct(@PathVariable Long product_id) {
+        try {
+            List<String> customerList = customerService.findCustomerByProduct(product_id);
+            return new ResponseEntity<>(customerList, HttpStatus.OK);
+        } catch (RecordNotFoundException recordNotFoundException) {
+            System.out.println(recordNotFoundException.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @PostMapping("/customer")
     public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
 

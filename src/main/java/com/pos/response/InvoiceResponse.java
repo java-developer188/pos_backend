@@ -5,7 +5,11 @@ import java.util.List;
 
 import com.pos.response.Classes.ProductDescription;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 public class InvoiceResponse {
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long invoice_id;
 	private LocalDateTime invoice_date;
 	private LocalDateTime order_Date;

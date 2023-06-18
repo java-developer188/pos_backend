@@ -8,10 +8,7 @@ import com.pos.entity.*;
 import com.pos.exception.NameException;
 import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
-import com.pos.repository.CustomerRepository;
-import com.pos.repository.OrderRepository;
-import com.pos.repository.ProductOrderRepository;
-import com.pos.repository.ProductRepository;
+import com.pos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +28,14 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
     ProductRepository productRepo;
 
     @Autowired
+    DiscountRepository discountRepo;
+
+    @Autowired
     ProductOrderRepository productOrderRepo;
 
 
-    public Long calculateDiscount(List<Integer> totalAmount,OrderDto orderDto){
-      Long total = 0l;
+    public Long calculateDiscount(List<Integer> totalAmount,OrderDto orderDto ){
+        Long total = 0l;
         for (Integer value :totalAmount) {
             total += value;
         }
@@ -59,11 +59,10 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                 discountedValue = amountList.get(i) - (amountList.get(i) * (discount.getDiscountPercentage()) / 100);
                 amountList.add(discountedValue);
             }
-
       });
         
-        finalAmount = amountList.get(amountList.size()-1);
-    return finalAmount;
+       finalAmount = amountList.get(amountList.size()-1);
+       return finalAmount;
     }
 
     public void updateStockInInventory(int productQuantityInOrder, Product product1 ) {
@@ -103,6 +102,10 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         }
         return customer1;
     }
+    public List<String> findCustomerByProduct(Long product_id) throws RecordNotFoundException {
+        List<String> customerNames = customerRepo.findCustomerNameByProduct(product_id);
+        return customerNames;
+    }
     @Override
     public Customer add(Customer customer) {
         if ( null != customer.getName() ) {
@@ -141,14 +144,13 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
         else{
             customer1 = customerRepo.save(customerAdapter.convertDtoToDao(customerDto));
         }
+        Customer orderPlacer=customer1;
         List<Product> productList = new ArrayList<>();
-        List<Order> orderList = new ArrayList<>();
         OrderAdapterImpl orderAdapter = new OrderAdapterImpl();
         List<Integer> amountList = new ArrayList<>();
 
             customerDto.getOrderDtoList().forEach(orderDto -> {
                 Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
-                orderList.add(order);
                 orderDto.getProductList().forEach(product -> {
                     Optional<Product> productOptional = productRepo.findById(product.getId());
                     if (productOptional.isPresent()) {
@@ -167,15 +169,13 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                         updateStockInInventory(productQuantityInOrder,product1);
                     }
                 });
-                order.setDiscounts(orderDto.getDiscountList());
-                order.setTotalAmount(calculateDiscount(amountList, orderDto));
-                order.setStatus("Pending");
 
+                order.setTotalAmount(calculateDiscount(amountList, orderDto));
+
+                order.setDiscounts(orderDto.getDiscountList());
+                order.setStatus("Pending");
+                order.setCustomer(orderPlacer);
             });
-        Customer customer = customer1;
-        orderList.forEach(order -> {
-            order.setCustomer(customer);
-        });
         return customer1;
        //return customerRepo.save(customer1);
     }
