@@ -120,7 +120,11 @@ public class ExcelExportService {
             	prodRowNum++;
             	row=sheet.createRow(prodRowNum-1);
             	cell=row.createCell(4);
-            	cell.setCellValue("DISCOUNT");
+			    long totalDiscountPercentage = 0l;
+			    for (int i = 0; i < invoiceResponse.getDiscountList().size(); i++) {
+				    totalDiscountPercentage+=invoiceResponse.getDiscountList().get(i);
+			    }
+            	cell.setCellValue("DISCOUNT "+totalDiscountPercentage+"%");
             	cellFontColor(workbook, cell);
             	cell = row.createCell(5);
             	cell.setCellValue(invoiceResponse.getDiscounted_amount());

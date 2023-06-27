@@ -19,7 +19,17 @@ public class InvoiceResponse {
 	private long order_total_amount;
 	private long discounted_amount;
 	private long order_deducted_amount;
-	
+
+	private List<Long> discountList;
+
+	public List<Long> getDiscountList() {
+		return discountList;
+	}
+
+	public void setDiscountList(List<Long> discountList) {
+		this.discountList = discountList;
+	}
+
 	public Long getInvoice_id() {
 		return invoice_id;
 	}

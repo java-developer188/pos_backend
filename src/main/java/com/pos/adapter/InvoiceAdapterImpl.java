@@ -26,25 +26,28 @@ public class InvoiceAdapterImpl implements BasePosAdapter<InvoiceDto, Invoice>{
 		return null;
 	}
 	
-	public static InvoiceResponse getInvoiceResponse(Order order, Customer customer,List<Product> product, List<ProductOrder> productorder, Invoice invoice ) {
+	public static InvoiceResponse getInvoiceResponse(Order order, Customer customer, List<Product> product, List<ProductOrder> productOrder, Invoice invoice ) {
 		InvoiceResponse invoiceResp = new InvoiceResponse();
 		List<ProductDescription> prodDescriptionList = new ArrayList<>();
+		List<Long> discountPercentageList = new ArrayList<>();
 		long sumTotalPriceAllProd = 0;
 		invoiceResp.setInvoice_id(invoice.getId());
 		invoiceResp.setInvoice_date(invoice.getInvoiceDate());
 		invoiceResp.setOrder_Date(order.getOrderDate());
 		invoiceResp.setCustomer_name(customer.getName());
 		invoiceResp.setCustomer_contactInfo(customer.getContactInfo());
+        order.getDiscounts().forEach(discount ->
+				discountPercentageList.add(discount.getDiscountPercentage()));
 		
 		//setting product desc in the prod desc (Class) list
-		for(int i=0;i<productorder.size();i++) {
+		for(int i = 0; i< productOrder.size(); i++) {
 			ProductDescription prodDesc = new ProductDescription();
 			prodDesc.setName(product.get(i).getName());
-			prodDesc.setQuantity(productorder.get(i).getQuantity());
-			int unitPrice=productorder.get(i).getPrice()/productorder.get(i).getQuantity();
+			prodDesc.setQuantity(productOrder.get(i).getQuantity());
+			int unitPrice= productOrder.get(i).getPrice()/ productOrder.get(i).getQuantity();
 			prodDesc.setUnitPrice(unitPrice);
-			prodDesc.setTotalPrice(productorder.get(i).getPrice());
-			sumTotalPriceAllProd= sumTotalPriceAllProd + productorder.get(i).getPrice();
+			prodDesc.setTotalPrice(productOrder.get(i).getPrice());
+			sumTotalPriceAllProd= sumTotalPriceAllProd + productOrder.get(i).getPrice();
 			prodDescriptionList.add(prodDesc);
 		}
 		invoiceResp.setProductDesc(prodDescriptionList);
@@ -52,7 +55,7 @@ public class InvoiceAdapterImpl implements BasePosAdapter<InvoiceDto, Invoice>{
 		long discountedAmount = sumTotalPriceAllProd - order.getTotalAmount();
 		invoiceResp.setDiscounted_amount(discountedAmount);
 		invoiceResp.setOrder_deducted_amount(order.getTotalAmount());
-		
+		invoiceResp.setDiscountList(discountPercentageList);
 		
 		return invoiceResp;
 	}
