@@ -19,6 +19,9 @@ public class ProductOrder {
     @Column(name = "total_price")
     private Integer price;
 
+    @Column
+    private Integer tradePrice ;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     @JsonIgnore
@@ -28,6 +31,15 @@ public class ProductOrder {
     @JsonIgnore
     @JoinColumn(name = "order_id")
     Order order;
+
+
+    public Integer getTradePrice() {
+        return tradePrice;
+    }
+
+    public void setTradePrice(Integer tradePrice) {
+        this.tradePrice = tradePrice;
+    }
 
     public Integer getPrice() {
         return price;

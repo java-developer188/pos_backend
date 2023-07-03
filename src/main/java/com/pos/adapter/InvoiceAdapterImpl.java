@@ -46,8 +46,9 @@ public class InvoiceAdapterImpl implements BasePosAdapter<InvoiceDto, Invoice>{
 			prodDesc.setQuantity(productOrder.get(i).getQuantity());
 			int unitPrice= productOrder.get(i).getPrice()/ productOrder.get(i).getQuantity();
 			prodDesc.setUnitPrice(unitPrice);
-			prodDesc.setTotalPrice(productOrder.get(i).getPrice());
-			sumTotalPriceAllProd= sumTotalPriceAllProd + productOrder.get(i).getPrice();
+			//prodDesc.setTotalPrice(productOrder.get(i).getPrice());
+			prodDesc.setTotalPrice(productOrder.get(i).getTradePrice());
+			sumTotalPriceAllProd= sumTotalPriceAllProd + productOrder.get(i).getTradePrice();
 			prodDescriptionList.add(prodDesc);
 		}
 		invoiceResp.setProductDesc(prodDescriptionList);

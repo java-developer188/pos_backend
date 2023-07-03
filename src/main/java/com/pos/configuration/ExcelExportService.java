@@ -73,11 +73,13 @@ public class ExcelExportService {
                 cell.setCellValue(desc.getUnitPrice());
                 cell.setCellStyle(cellStyle);
 				cell = row.createCell(4);
-				double priceInDouble = desc.getUnitPrice();
-				cell.setCellValue(priceInDouble-(priceInDouble*0.15));
+				double productPrice = desc.getUnitPrice();
+				double tradePrice = productPrice-(productPrice*0.15);
+				cell.setCellValue(tradePrice);
 				cell.setCellStyle(cellStyle);
 				cell = row.createCell(5);
                 cell.setCellValue(desc.getTotalPrice());
+				//cell.setCellValue(desc.getQuantity()*tradePrice);
                 cell.setCellStyle(cellStyle);
 
 //                cell = row.createCell(5);

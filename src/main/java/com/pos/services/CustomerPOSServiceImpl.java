@@ -34,12 +34,12 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
     ProductOrderRepository productOrderRepo;
 
 
-    public Long calculateDiscount(List<Integer> totalAmount,OrderDto orderDto ){
-        Long total = 0l;
-        for (Integer value :totalAmount) {
-            total += value;
+    public Long calculateDiscount(List<Integer> totalAmountPerProduct,OrderDto orderDto ){
+        Long totalTradePriceAllProducts = 0l;
+        for (Integer amountWithRespectOfProductQuantity :totalAmountPerProduct) {
+            totalTradePriceAllProducts += amountWithRespectOfProductQuantity;
         }
-        Long sum = total;
+        Long sum = totalTradePriceAllProducts;
 
        ArrayList<Long> amountList = new ArrayList<>();
        Long finalAmount= 0l;
@@ -160,9 +160,16 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
                         productOrder.setProduct(product1);
                         productOrder.setOrder(order);
                         productOrder.setQuantity(product.getQuantity());
-                        int totalPrice = product.getQuantity() * product1.getPrice();
-                        productOrder.setPrice(totalPrice);
-                        amountList.add(totalPrice);
+                        int totalUnitPrice = product.getQuantity() * product1.getPrice();
+//                        productOrder.setPrice(totalUnitPrice);
+//                        amountList.add(totalUnitPrice);
+
+//                        Calculating trade price with respect to quantity
+                        int totalTradePrice = (int) (totalUnitPrice - totalUnitPrice*0.15);
+
+                        productOrder.setPrice(totalUnitPrice);
+                        productOrder.setTradePrice(totalTradePrice);
+                        amountList.add(totalTradePrice);
                         productOrderRepo.save(productOrder);
 
                         int productQuantityInOrder = product.getQuantity();

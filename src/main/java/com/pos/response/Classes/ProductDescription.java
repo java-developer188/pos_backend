@@ -4,7 +4,7 @@ public class ProductDescription {
 	private String name;
 	private Integer quantity;
 	private Integer unitPrice;
-	private Integer totalPrice;
+	private double totalPrice;
 	
 	public String getName() {
 		return name;
@@ -24,10 +24,10 @@ public class ProductDescription {
 	public void setUnitPrice(Integer unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-	public Integer getTotalPrice() {
+	public double getTotalPrice() {
 		return totalPrice;
 	}
-	public void setTotalPrice(Integer totalPrice) {
+	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 	
