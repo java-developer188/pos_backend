@@ -75,7 +75,19 @@ public class InvoiceServiceImpl implements POSService<Invoice> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	public Long generateInvoiceNumber() {
+		Long lastInvoiceNumber = invoiceRepo.findLastInvoiceNumber();
+		Long newInvoiceNumber = 0l;
+
+		if (lastInvoiceNumber == null) {
+			// If no invoices exist yet, start with a default value
+			newInvoiceNumber = 1l;
+		}
+		else {
+			newInvoiceNumber  = lastInvoiceNumber + 1l;
+		}
+		return newInvoiceNumber;
+	}
 	public InvoiceResponse generateInvoice(Long order_id) {
 		Boolean isError = false;
 		//-------
@@ -95,10 +107,12 @@ public class InvoiceServiceImpl implements POSService<Invoice> {
 				invoiceRepo.save(invoice);
 				return InvoiceAdapterImpl.getInvoiceResponse(order, customer, product, productOrder,invoice);
 			}
+			Long currInvoiceNum = generateInvoiceNumber();
 			Invoice invoice = new Invoice();
 			invoice.setInvoiceDate(LocalDateTime.now()); //every time an invoice is generated/regenerated the current date and time will be inserted in db
 			invoice.setInvoiceStatus(InvoiceStatus.GENERATED);
 			invoice.setOrder(order);
+			invoice.setId(currInvoiceNum);
 			invoice = invoiceRepo.save(invoice);
 			order.setStatus("COMPLETED");
 			order = orderRepo.save(order);

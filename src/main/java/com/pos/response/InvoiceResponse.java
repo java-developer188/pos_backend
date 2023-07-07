@@ -7,9 +7,11 @@ import com.pos.response.Classes.ProductDescription;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 public class InvoiceResponse {
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long invoice_id;
 	private LocalDateTime invoice_date;
 	private LocalDateTime order_Date;

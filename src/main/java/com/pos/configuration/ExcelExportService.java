@@ -14,8 +14,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.pos.response.InvoiceResponse;
 import com.pos.response.Classes.ProductDescription;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ExcelExportService {
+
 	public static void exportInvoice(InvoiceResponse invoiceResponse, Long order_id) {
 		
 		try (FileInputStream templateFile = new FileInputStream("Template.xlsx");
@@ -30,8 +32,9 @@ public class ExcelExportService {
             // Define the data to be populated in the template
             Map<String, String> data = new HashMap<>();
             data.put("DATE", "DATE: "+ dataAndTime[0]);
-            data.put("INVOICE_NUM","INVOICE # : "+invoiceResponse.getInvoice_id().toString());
-            data.put("CustomerName","Customer Name : "+invoiceResponse.getCustomer_name().toUpperCase());
+//          data.put("INVOICE_NUM","INVOICE # : "+invoiceResponse.getInvoice_id().toString());
+			data.put("INVOICE_NUM","INVOICE # : "+invoiceResponse.getInvoice_id().toString());
+			data.put("CustomerName","Customer Name : "+invoiceResponse.getCustomer_name().toUpperCase());
             data.put("CustomerContact","Cell # : "+invoiceResponse.getCustomer_contactInfo().toString());
             // Add more key-value pairs as needed
 

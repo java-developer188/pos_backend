@@ -23,7 +23,7 @@ import com.pos.enums.InvoiceStatus;
 public class Invoice {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "invoice_id")
 	private Long id;
 	

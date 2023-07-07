@@ -11,6 +11,7 @@ import com.pos.entity.Product;
 import com.pos.entity.ProductOrder;
 import com.pos.response.InvoiceResponse;
 import com.pos.response.Classes.ProductDescription;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class InvoiceAdapterImpl implements BasePosAdapter<InvoiceDto, Invoice>{
 
@@ -25,7 +26,6 @@ public class InvoiceAdapterImpl implements BasePosAdapter<InvoiceDto, Invoice>{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 	public static InvoiceResponse getInvoiceResponse(Order order, Customer customer, List<Product> product, List<ProductOrder> productOrder, Invoice invoice ) {
 		InvoiceResponse invoiceResp = new InvoiceResponse();
 		List<ProductDescription> prodDescriptionList = new ArrayList<>();
