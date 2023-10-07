@@ -1,6 +1,9 @@
 package com.pos.repository;
 
 import com.pos.entity.Product;
+import com.pos.response.ProductDetailsResponse;
+
+import org.hibernate.mapping.Any;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,5 +16,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<String> findAllNames();
 
     Optional<Product> findByName(String name);
+    
+    
 
 }

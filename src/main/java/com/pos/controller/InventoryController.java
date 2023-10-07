@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(value="*")
 public class InventoryController {
     @Autowired
     InventoryRepository inventoryRepo;

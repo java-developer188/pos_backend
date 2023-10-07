@@ -6,11 +6,13 @@ import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.ProductOrderRepository;
 import com.pos.repository.ProductRepository;
+import com.pos.response.ProductDetailsResponse;
 import com.pos.services.ProductPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.mapping.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(value="*")
+
 public class ProductController {
 
     @Autowired
@@ -135,5 +139,6 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
 }
 

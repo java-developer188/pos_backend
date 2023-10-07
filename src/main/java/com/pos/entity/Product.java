@@ -37,7 +37,7 @@ public class Product {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="inventory_id")
-    @JsonIgnore
+//    @JsonIgnore
     private Inventory inventory;
 
     public Inventory getInventory() {

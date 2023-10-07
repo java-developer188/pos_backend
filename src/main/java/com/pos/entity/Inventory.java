@@ -2,6 +2,8 @@ package com.pos.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "inventory")
 public class Inventory {
@@ -18,7 +20,7 @@ public class Inventory {
     private Double soldStock;
 
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "inventory")
-    //@JsonIgnore
+    @JsonIgnore
     private Product product;
 
     public Product getProduct() {

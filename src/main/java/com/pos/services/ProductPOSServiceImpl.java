@@ -5,6 +5,9 @@ import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
 import com.pos.repository.ProductOrderRepository;
 import com.pos.repository.ProductRepository;
+import com.pos.response.ProductDetailsResponse;
+
+import org.hibernate.mapping.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,10 +56,11 @@ public class ProductPOSServiceImpl implements POSService<Product> {
     @Override
     public Product add(Product product) {
         if ( null != product.getName() ) {
-            if (!product.getName().matches("^[a-zA-Z\\s]+")) {
+            if (!product.getName().matches("^[a-zA-Z0-9\\s]+")) {
                 throw new NameException("Only alphabets and spaces are allowed for product's name.");
             }
         }
+        
         Product product1 = productRepository.save(product);
         return product1;
     }
@@ -88,12 +92,14 @@ public class ProductPOSServiceImpl implements POSService<Product> {
     public Product update(Long id, Product product) {
         Product updateProduct = null;
         Optional<Product> productOptional = productRepository.findById(product.getId());
+        Optional<Inventory> inventoryOptional = inventoryR
         if(productOptional.isPresent()){
             updateProduct = productOptional.get();
             updateProduct.setName(product.getName());
             updateProduct.setBatchNum(product.getBatchNum());
             updateProduct.setMfgDate(product.getMfgDate());
             updateProduct.setExpiryDate(product.getExpiryDate());
+            updateProduct.setInventory(null);
         }
         return updateProduct;
     }
@@ -123,6 +129,8 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         }
         return patchProduct;
     }
+    
+    
 
 
 
