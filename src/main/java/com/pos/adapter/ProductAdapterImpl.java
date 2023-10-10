@@ -1,28 +1,36 @@
 package com.pos.adapter;
 
-import java.util.List;
-
 import com.pos.dto.ProductDto;
+import com.pos.entity.Customer;
 import com.pos.entity.Product;
 
-public class ProductAdapterImpl implements BasePosAdapter<ProductDto, Product>  {
+public class ProductAdapterImpl implements BasePosAdapter<ProductDto,Product>{
+    @Override
+    public Product convertDtoToDao(ProductDto productDto) {
+        Product product = new Product();
+        product.setId(productDto.getId());
+        product.setName(productDto.getName());
+        product.setBatchNum(productDto.getBatchNum());
+        product.setPrice(productDto.getPrice());
+        product.setMfgDate(productDto.getMfgDate());
+        product.setExpiryDate(productDto.getExpiryDate());
+        return product;
+    }
 
-	@Override
-	public Product convertDtoToDao(ProductDto t) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ProductDto convertDaoToDto(Product product) {
+        return null;
+    }
 
-	@Override
-	public ProductDto convertDaoToDto(Product u) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
-	public ProductDto convertDaoListToDtoList(List<Product> u) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Product convertDtoToDaoWithSameId(ProductDto productDto,Long id) {
+        Product product = new Product();
+        product.setId(id);
+        product.setName(productDto.getName());
+        product.setBatchNum(productDto.getBatchNum());
+        product.setPrice(productDto.getPrice());
+        product.setMfgDate(productDto.getMfgDate());
+        product.setExpiryDate(productDto.getExpiryDate());
+        return product;
+    }
 
 }

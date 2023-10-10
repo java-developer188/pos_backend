@@ -29,12 +29,18 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         List<Product> productList = productRepository.findAll();
         return productList;
     }
-    public List<String> findAllProductNames(){
-        List<String> productNames= productRepository.findAllNames();
+
+    @Override
+    public Product add(Product product) {
+        return null;
+    }
+
+    public List<String> findAllProductNames() {
+        List<String> productNames = productRepository.findAllNames();
         return productNames;
     }
 
-    public Integer getTotalSoldQuantityOfProductById(Long id){
+    public Integer getTotalSoldQuantityOfProductById(Long id) {
         Integer totalSold = productOrderRepo.calculateTotalSoldProductById(id);
         return totalSold;
     }
@@ -52,15 +58,13 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         return product;
     }
 
-
-    @Override
-    public Product add(Product product) {
-        if ( null != product.getName() ) {
-            if (!product.getName().matches("^[a-zA-Z0-9\\s]+")) {
+    public Product addProduct(ProductDto productDto) throws NameException, Exception {
+        if (null != productDto.getName()) {
+            if (!productDto.getName().matches("^[A-Za-z0-9\\s-]*$")) {
                 throw new NameException("Only alphabets and spaces are allowed for product's name.");
             }
         }
-        
+
         Product product1 = productRepository.save(product);
         return product1;
     }
@@ -129,8 +133,8 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         }
         return patchProduct;
     }
-    
-    
+
+
 
 
 
