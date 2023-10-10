@@ -23,9 +23,13 @@ public class ProductOrder {
     private Integer tradePrice ;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
+    @JoinColumns({
+            @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
+            @JoinColumn(name = "batchNum", referencedColumnName = "batchNum")
+    })
     @JsonIgnore
     Product product;
+
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore

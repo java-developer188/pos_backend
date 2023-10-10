@@ -1,6 +1,7 @@
 package com.pos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pos.dto.ProductDto;
 import com.pos.entity.Product;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
@@ -96,16 +97,20 @@ public class ProductController {
         }
     }
     @PostMapping("/product")
-    public ResponseEntity<Product> addProducts(@RequestBody Product product) {
-
+    public ResponseEntity<Product> addProducts(@RequestBody ProductDto productDto) {
+        Product product = null;
         try {
-            productService.add(product);
-            return new ResponseEntity<>(HttpStatus.OK);
+            product = productService.addProduct(productDto);
+            return new ResponseEntity<>(product,HttpStatus.OK);
         } catch (NameException nameException) {
             System.out.println(nameException.getMessage());
             return new ResponseEntity<>(product, HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage()+"");
+            return new ResponseEntity<>(product, HttpStatus.NOT_ACCEPTABLE);
         }
     }
+
 
     @PutMapping("/product/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {

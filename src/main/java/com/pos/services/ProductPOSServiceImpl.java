@@ -1,5 +1,7 @@
 package com.pos.services;
 
+import com.pos.adapter.ProductAdapterImpl;
+import com.pos.dto.ProductDto;
 import com.pos.entity.Product;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
@@ -64,9 +66,18 @@ public class ProductPOSServiceImpl implements POSService<Product> {
                 throw new NameException("Only alphabets and spaces are allowed for product's name.");
             }
         }
-
-        Product product1 = productRepository.save(product);
-        return product1;
+        Product product1 = null;
+        ProductAdapterImpl productAdapter = new ProductAdapterImpl();
+        if (productRepository.findByName(productDto.getName()).isPresent()) {
+            if (productRepository.findByBatchNum(productDto.getBatchNum()).isPresent()) {
+                throw new Exception("Enter new batch Number");
+            }
+            Long id = productDto.getId();
+            product1 = productAdapter.convertDtoToDaoWithSameId(productDto, id);
+        } else {
+            product1 = productAdapter.convertDtoToDao(productDto);
+        }
+        return productRepository.save(product1);
     }
 
     @Override
@@ -96,14 +107,12 @@ public class ProductPOSServiceImpl implements POSService<Product> {
     public Product update(Long id, Product product) {
         Product updateProduct = null;
         Optional<Product> productOptional = productRepository.findById(product.getId());
-        Optional<Inventory> inventoryOptional = inventoryR
-        if(productOptional.isPresent()){
+        if (productOptional.isPresent()) {
             updateProduct = productOptional.get();
             updateProduct.setName(product.getName());
             updateProduct.setBatchNum(product.getBatchNum());
             updateProduct.setMfgDate(product.getMfgDate());
             updateProduct.setExpiryDate(product.getExpiryDate());
-            updateProduct.setInventory(null);
         }
         return updateProduct;
     }
@@ -133,8 +142,6 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         }
         return patchProduct;
     }
-
-
 
 
 

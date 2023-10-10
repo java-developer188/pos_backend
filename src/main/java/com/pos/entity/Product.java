@@ -1,23 +1,25 @@
 package com.pos.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pos.entity.compositekey.ProductId;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "products")
+@IdClass(ProductId.class)
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id")
     private Long id;
 
     @Column(name = "product_name")
     private String name;
 
-    @Column(name = "batch_No")
+    @Id
+    @Column(name = "batchNum")
     private String batchNum;
 
     @Column
