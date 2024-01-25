@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(value="*")
+@CrossOrigin(value = "*")
 
 public class ProductController {
 
@@ -46,7 +46,8 @@ public class ProductController {
                 Product product = new Product();
                 product.setName(row.getCell(0).getStringCellValue());
                 product.setBatchNum(row.getCell(1).getStringCellValue());
-               // product.setPrice(Integer.valueOf(row.getCell(2).getStringCellValue()));
+                product.setId((long) row.getCell(2).getNumericCellValue());
+//                product.setPrice(Integer.valueOf(row.getCell(2).getStringCellValue()));
 //                product.setMfgDate(row.getCell(2).getStringCellValue());
 //                product.setExpiryDate(row.getCell(3).getStringCellValue());
                 productList.add(product);
@@ -96,21 +97,36 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @PostMapping("/product")
     public ResponseEntity<Product> addProducts(@RequestBody ProductDto productDto) {
         Product product = null;
         try {
             product = productService.addProduct(productDto);
-            return new ResponseEntity<>(product,HttpStatus.OK);
+            return new ResponseEntity<>(product, HttpStatus.OK);
         } catch (NameException nameException) {
             System.out.println(nameException.getMessage());
             return new ResponseEntity<>(product, HttpStatus.NOT_ACCEPTABLE);
         } catch (Exception exception) {
-            System.out.println(exception.getMessage()+"");
+            System.out.println(exception.getMessage() + "");
             return new ResponseEntity<>(product, HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
+    @PostMapping("/product/new/batch")
+    public ResponseEntity<Product> addProductWithBatchNum(@RequestBody ProductDto productDto) {
+        Product product = null;
+        try {
+            product = productService.addProductWithNewBatch(productDto);
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (NameException nameException) {
+            System.out.println(nameException.getMessage());
+            return new ResponseEntity<>(product, HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>(product, HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
 
     @PutMapping("/product/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
@@ -144,6 +160,6 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
+
 }
 

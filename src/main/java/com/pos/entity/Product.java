@@ -35,11 +35,12 @@ public class Product {
     private Integer quantity;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     Set<ProductOrder> productOrders;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="inventory_id")
-//    @JsonIgnore
+    @JsonIgnore
     private Inventory inventory;
 
     public Inventory getInventory() {
