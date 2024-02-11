@@ -44,5 +44,4 @@ public class ProductAdapterImpl implements BasePosAdapter<ProductDto, Product> {
         product.setExpiryDate(productDto.getExpiryDate());
         return product;
     }
-
 }

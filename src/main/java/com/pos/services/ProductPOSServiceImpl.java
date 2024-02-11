@@ -15,22 +15,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductPOSServiceImpl implements POSService<Product> {
+public class ProductPOSServiceImpl {
 
     @Autowired
     ProductRepository productRepository;
     @Autowired
     ProductOrderRepository productOrderRepo;
 
-    @Override
     public List<Product> findAll() {
         List<Product> productList = productRepository.findAll();
         return productList;
-    }
-
-    @Override
-    public Product add(Product product) {
-        return null;
     }
 
     public List<String> findAllProductNames() {
@@ -61,7 +55,7 @@ public class ProductPOSServiceImpl implements POSService<Product> {
                 throw new NameException("Only alphabets and spaces are allowed for product's name.");
             }
         }
-        Product product1 = null;
+        Product product1;
         ProductAdapterImpl productAdapter = new ProductAdapterImpl();
         if (productRepository.findByName(productDto.getName()).isPresent()) {
             if (productRepository.findByBatchNum(productDto.getBatchNum()).isPresent()) {
@@ -94,9 +88,9 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         return productRepository.save(product);
     }
 
-    @Override
-    public void deleteUsingId(Long id) {
-        Optional<Product> productOptional = productRepository.findById(id);
+    public void deleteUsingIdAndBatch(Long id,String batchNum) {
+//        Optional<Product> productOptional = productRepository.findById(id);
+        Optional<Product> productOptional = productRepository.findByIdAndBatchNum(id,batchNum);
         if (productOptional.isPresent()) {
             productRepository.delete(productOptional.get());
         } else {
@@ -104,7 +98,6 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         }
     }
 
-    @Override
     public void deleteUsingName(String name) throws RecordNotFoundException {
         Optional<Product> productOptional = productRepository.findByName(name);
         if (productOptional.isPresent()) {
@@ -114,11 +107,10 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         }
     }
 
-    @Override
     @Transactional(rollbackFor = Exception.class)
-    public Product update(Long id, Product product) {
+    public Product update(Long id,String batchNum, Product product) {
         Product updateProduct = null;
-        Optional<Product> productOptional = productRepository.findById(product.getId());
+        Optional<Product> productOptional = productRepository.findByIdAndBatchNum(id,batchNum);
         if (productOptional.isPresent()) {
             updateProduct = productOptional.get();
             updateProduct.setName(product.getName());
@@ -129,11 +121,10 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         return updateProduct;
     }
 
-    @Override
     @Transactional(rollbackFor = Exception.class)
-    public Product patch(Long id, Product product) {
+    public Product patch(Long id,String batchNum, Product product) {
         Product patchProduct = null;
-        Optional<Product> productOptional = productRepository.findById(id);
+        Optional<Product> productOptional = productRepository.findByIdAndBatchNum(id,batchNum);
         if (productOptional.isPresent()) {
             patchProduct = productOptional.get();
             if (product.getName() != null) {
@@ -150,6 +141,4 @@ public class ProductPOSServiceImpl implements POSService<Product> {
         }
         return patchProduct;
     }
-
-
 }

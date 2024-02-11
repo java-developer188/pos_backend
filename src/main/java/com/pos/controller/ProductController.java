@@ -5,15 +5,12 @@ import com.pos.dto.ProductDto;
 import com.pos.entity.Product;
 import com.pos.exception.NameException;
 import com.pos.exception.RecordNotFoundException;
-import com.pos.repository.ProductOrderRepository;
 import com.pos.repository.ProductRepository;
-import com.pos.response.ProductDetailsResponse;
 import com.pos.services.ProductPOSServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hibernate.mapping.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,19 +58,16 @@ public class ProductController {
             System.out.println("IO Exception");
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
     }
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts() {
-        //return new ResponseEntity<>(playerRepo.findAllNames(), HttpStatus.OK);
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/product/names")
     public ResponseEntity<List<String>> getProductNames() {
         return new ResponseEntity<>(productService.findAllProductNames(), HttpStatus.OK);
-
     }
 
     @GetMapping("/product/{name}")
@@ -99,7 +93,7 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<Product> addProducts(@RequestBody ProductDto productDto) {
+    public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto) {
         Product product = null;
         try {
             product = productService.addProduct(productDto);
@@ -114,7 +108,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/new/batch")
-    public ResponseEntity<Product> addProductWithBatchNum(@RequestBody ProductDto productDto) {
+    public ResponseEntity<Product> addProductWithNewBatchNum(@RequestBody ProductDto productDto) {
         Product product = null;
         try {
             product = productService.addProductWithNewBatch(productDto);
@@ -128,21 +122,21 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/product/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        productService.update(id, product);
+    @PutMapping("/product/{id}/{batchNum}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @PathVariable String batchNum, @RequestBody Product product) {
+        productService.update(id, batchNum, product);
         return new ResponseEntity<Product>(HttpStatus.OK);
     }
 
-    @PatchMapping("/product/{id}")
-    public Product patchProduct(@PathVariable Long id, @RequestBody Product product) {
-        return productService.patch(id, product);
+    @PatchMapping("/product/{id}/{batchNum}")
+    public Product patchProduct(@PathVariable Long id, @PathVariable String batchNum, @RequestBody Product product) {
+        return productService.patch(id, batchNum, product);
     }
 
-    @DeleteMapping("/product/id/{id}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable Long id) {
+    @DeleteMapping("/product/id/{id}/{batchNum}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long id, @PathVariable String batchNum) {
         try {
-            productService.deleteUsingId(id);
+            productService.deleteUsingIdAndBatch(id, batchNum);
             return new ResponseEntity<Product>(HttpStatus.OK);
         } catch (RecordNotFoundException recordNotFoundException) {
             System.out.println(recordNotFoundException.getMessage());
@@ -160,6 +154,4 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 }
-

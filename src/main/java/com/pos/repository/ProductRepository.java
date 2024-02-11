@@ -12,6 +12,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT p.product_name FROM products p", nativeQuery = true)
     List<String> findAllNames();
+    Optional<Product> findByIdAndBatchNum(Long id, String batchNum);
 
     //    @Query(value = "SELECT p.product_name FROM products p Where p.product_name = :name LIMIT 1"
 //            , nativeQuery = true)

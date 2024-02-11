@@ -7,8 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,54 +19,54 @@ import com.pos.enums.InvoiceStatus;
 @Table(name = "invoice")
 
 public class Invoice {
-	
-	@Id
-	//@GeneratedValue(strategy = GenerationType.AUTO)
+
+    @Id
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "invoice_id")
-	private Long id;
-	
-	@Column(name="invoice_date")
-	private LocalDateTime invoiceDate; 
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name="inventory_status")
-	private InvoiceStatus invoiceStatus;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JsonIgnore
-	@JoinColumn(name="order_id")
-	private Order order;
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "invoice_date")
+    private LocalDateTime invoiceDate;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Enumerated(EnumType.STRING)
+    @Column(name = "inventory_status")
+    private InvoiceStatus invoiceStatus;
 
-	public LocalDateTime getInvoiceDate() {
-		return invoiceDate;
-	}
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-	public void setInvoiceDate(LocalDateTime invoiceDate) {
-		this.invoiceDate = invoiceDate;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public InvoiceStatus getInvoiceStatus() {
-		return invoiceStatus;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
-		this.invoiceStatus = invoiceStatus;
-	}
+    public LocalDateTime getInvoiceDate() {
+        return invoiceDate;
+    }
 
-	public Order getOrder() {
-		return order;
-	}
+    public void setInvoiceDate(LocalDateTime invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
 
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-	
+    public InvoiceStatus getInvoiceStatus() {
+        return invoiceStatus;
+    }
+
+    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
 }
