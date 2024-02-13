@@ -26,7 +26,7 @@ public class ProductDto {
 
     List<ProductOrder> productOrders;
 
-    private Inventory inventory;
+    private InventoryDto inventoryDto;
 
     public Long getId() {
         return id;
@@ -92,11 +92,11 @@ public class ProductDto {
         this.productOrders = productOrders;
     }
 
-    public Inventory getInventory() {
-        return inventory;
+    public InventoryDto getInventory() {
+        return inventoryDto;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public void setInventory(InventoryDto inventoryDto) {
+        this.inventoryDto = inventoryDto;
     }
 }

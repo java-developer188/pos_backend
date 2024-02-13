@@ -25,6 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(value = "*")
 public class CustomerController {
     @Autowired
     CustomerPOSServiceImpl customerService;

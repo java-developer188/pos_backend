@@ -64,7 +64,7 @@ public class ProductPOSServiceImpl {
             Long id = productDto.getId();
             product1 = productAdapter.convertDtoToDaoWithSameId(productDto, id);
         } else {
-            product1 = productAdapter.convertDtoToDao(productDto);
+            product1 = productAdapter.convertDtoToDao(productDto, productRepository.getMaxId());
         }
         return productRepository.save(product1);
     }
