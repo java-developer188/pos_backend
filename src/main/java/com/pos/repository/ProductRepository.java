@@ -22,6 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByBatchNum(String batchNum);
     
+    //Optional<Product> findByBatchNum(String batchNum);
+    
     @Query(value = "SELECT coalesce(max(product_id), 0) FROM products", nativeQuery = true)
     public Long getMaxId();
 

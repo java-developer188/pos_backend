@@ -20,8 +20,10 @@ public class ProductId implements Serializable {
         return super.equals(obj);
     }
 
-    public ProductId() {
-    }
+//    public ProductId(Long productId, String batchNum) {
+//    	this.id=productId;
+//    	this.batchNum=batchNum;
+//    }
 
     public long getId() {
         return id;

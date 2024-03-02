@@ -5,6 +5,7 @@ import com.pos.adapter.OrderAdapterImpl;
 import com.pos.dto.CustomerDto;
 import com.pos.dto.OrderDto;
 import com.pos.entity.*;
+import com.pos.entity.compositekey.ProductId;
 import com.pos.exception.NameException;
 import com.pos.exception.OutOfStockException;
 import com.pos.exception.RecordNotFoundException;
@@ -129,7 +130,7 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
     
     @Transactional(rollbackFor = Exception.class)
     public Customer addCustomerWithOrder(CustomerDto customerDto) throws NameException,OutOfStockException {
-
+    System.out.println("Customer order");;
         if ( null != customerDto.getName()) {
             if (!customerDto.getName().matches("^[a-zA-Z\\s]+")) {
                 throw new NameException("Only alphabets and spaces are allowed for customer's name.");
@@ -152,7 +153,8 @@ public class CustomerPOSServiceImpl implements POSService<Customer> {
             customerDto.getOrderDtoList().forEach(orderDto -> {
                 Order order = orderRepo.save(orderAdapter.convertDtoToDao(orderDto));
                 orderDto.getProductList().forEach(product -> {
-                    Optional<Product> productOptional = productRepo.findById(product.getId());
+                    //Optional<Product> productOptional = productRepo.findById(product.getId());
+                	Optional<Product> productOptional = productRepo.findByIdAndBatchNum(product.getId(),product.getBatchNum());
                     if (productOptional.isPresent()) {
                         Product product1 = productOptional.get();
                         productList.add(product1);
