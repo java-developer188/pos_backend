@@ -30,9 +30,10 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     Set<ProductOrder> productOrders;
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "inventory_id")
-    @JsonIgnore
+  
     private Inventory inventory;
     public Inventory getInventory() {
         return inventory;
